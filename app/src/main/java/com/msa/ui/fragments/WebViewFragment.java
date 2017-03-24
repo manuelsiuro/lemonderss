@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.msa.ui.MainActivity;
@@ -36,19 +35,9 @@ public class WebViewFragment extends Fragment {
         final View rootView     = inflater.inflate(R.layout.fragment_webview, container, false);
         final RssItem rssItem   = ((MainActivity)getActivity()).getRssItem();
         mWebView                = (WebView) rootView.findViewById(R.id.webview);
-        WebSettings settings    = mWebView.getSettings();
+
         String url              = rssItem.getLink();
         String mobileURL        = url.replace(WEB_URL, MOBILE_URL);
-
-        settings.setJavaScriptEnabled(true);
-        settings.setJavaScriptCanOpenWindowsAutomatically(true);
-        settings.setSupportMultipleWindows(true);
-        settings.setDomStorageEnabled(true);
-        settings.setAllowContentAccess(true);
-        settings.setAllowFileAccess(true);
-        settings.setAllowFileAccessFromFileURLs(true);
-        settings.setAllowUniversalAccessFromFileURLs(true);
-        settings.setDatabaseEnabled(true);
 
         mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.getSettings().setSupportZoom(true);

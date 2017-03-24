@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
         int id = item.getItemId();
 
-        if (id == R.id.settings) {
+        if (id == R.id.settings && currentFragmentIndex != FRAGMENT_SETTINGS) {
             displayView(FRAGMENT_SETTINGS);
             return true;
         }
