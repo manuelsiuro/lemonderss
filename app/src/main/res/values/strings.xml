@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Le Monde.fr</string>
+    <string name="connection_error">Erreur de connection.</string>
+    <string name="xml_error">Erreur XML</string>
+    <string name="read_on_website">Lire la suite sur Le Monde.fr</string>
+    <string name="rss_date_time">Le %1$s à %2$s</string>
+    <string name="toolbar_setting">Paramètres</string>
+    <string name="settings_only_wifi">Charger le flux RSS quand le WIFI est activé</string>
+    <string name="no_internet_connexion">Pas de connection internet</string>
+</resources>
