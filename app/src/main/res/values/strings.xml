@@ -8,4 +8,6 @@
     <string name="settings_only_wifi">Charger le flux RSS quand le WIFI est activé</string>
     <string name="no_internet_connexion">Pas de connection internet</string>
     <string name="wait_loading">Chargement en cours.</string>
+    <string name="page_not_found">Erreure de chargement</string>
+    <string name="page_not_found_desc">Le site Le Monde.fr est inaccessible</string>
 </resources>

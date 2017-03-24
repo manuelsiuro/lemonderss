@@ -13,7 +13,6 @@
     <dimen name="rss_title">18sp</dimen>
     <dimen name="rss_description">18sp</dimen>
     <dimen name="rss_padding_bottom">5dp</dimen>
-    <dimen name="songs_count">12dp</dimen>
     <dimen name="rss_date_padding_right">20dp</dimen>
     <dimen name="rss_title_padding_top">5dp</dimen>
 </resources>

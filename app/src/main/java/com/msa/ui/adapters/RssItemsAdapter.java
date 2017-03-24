@@ -25,7 +25,6 @@ public class RssItemsAdapter extends RecyclerView.Adapter<RssItemsAdapter.MyView
         TextView title;
         TextView datetime;
 
-
         MyViewHolder(View view) {
             super(view);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);

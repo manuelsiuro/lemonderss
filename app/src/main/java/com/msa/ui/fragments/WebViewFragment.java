@@ -13,7 +13,6 @@ import com.msa.ui.MainActivity;
 import com.msa.ui.R;
 import com.msa.ui.adapters.RssItem;
 
-
 public class WebViewFragment extends Fragment {
 
     private static final String WEB_URL     = "www.lemonde.fr";
@@ -25,7 +24,6 @@ public class WebViewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @SuppressLint({ "SetJavaScriptEnabled", "NewApi" })

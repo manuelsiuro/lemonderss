@@ -6,9 +6,6 @@ public class RssItem {
     private String enclosure;
     private String strDate;
     private String strTime;
-
-
-
     private String description;
     private String link;
 

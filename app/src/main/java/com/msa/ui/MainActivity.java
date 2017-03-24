@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -29,19 +30,20 @@ import com.msa.ui.preferences.PreferencesManager;
 
 public class MainActivity extends AppCompatActivity {
 
-    final int FRAGMENT_RSS_CARD_VIEW = 0;
-    final int FRAGMENT_RSS_DETAIL    = 1;
-    final int FRAGMENT_WEB_VIEW      = 2;
-    final int FRAGMENT_SETTINGS      = 4;
+    private final int FRAGMENT_RSS_CARD_VIEW = 0;
+    private final int FRAGMENT_RSS_DETAIL    = 1;
+    private final int FRAGMENT_WEB_VIEW      = 2;
+    private final int FRAGMENT_SETTINGS      = 4;
+
+    private final String FRAGMENT_TAG_CARD = "card";
+    private final String FRAGMENT_TAG_DETAIL = "detail";
+    private final String FRAGMENT_TAG_WEB = "web";
+    private final String FRAGMENT_TAG_SETTINGS = "settings";
 
     private Toolbar toolbar;
-    private SwipeRefreshLayout swipeRefreshLayout;
     private AppBarLayout appBarLayout;
     private ImageView backdrop;
-    private Fragment currentFragment;
     private RssItem rssItem;
-    private int currentFragmentIndex;
-
     private PreferencesManager prefs;
     private CoordinatorLayout snackBarCoordinator;
 
@@ -51,16 +53,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         toolbar             = (Toolbar) findViewById(R.id.toolbar);
-        swipeRefreshLayout  = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         appBarLayout        = (AppBarLayout) findViewById(R.id.appbar);
         backdrop            = (ImageView) findViewById(R.id.backdrop);
         snackBarCoordinator = (CoordinatorLayout)findViewById(R.id.snackbarlocation);
+
         prefs               = new PreferencesManager(this);
 
         setSupportActionBar(toolbar);
         initCollapsingToolbar();
         initBackDrop();
-        initSwipeRefreshLayout();
         initFragmentManager();
         displayViewDependWifiStatus();
     }
@@ -76,9 +77,15 @@ public class MainActivity extends AppCompatActivity {
 
         int id = item.getItemId();
 
-        if (id == R.id.settings && currentFragmentIndex != FRAGMENT_SETTINGS) {
-            displayView(FRAGMENT_SETTINGS);
-            return true;
+        SettingsFragment settingsFragment = (SettingsFragment)getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_SETTINGS);
+
+        if (id == R.id.settings) {
+            if (settingsFragment != null && settingsFragment.isVisible()) {
+                return true;
+            } else {
+                displayView(FRAGMENT_SETTINGS);
+                return true;
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -103,29 +110,6 @@ public class MainActivity extends AppCompatActivity {
                 showSnackMessage(getString(R.string.no_internet_connexion));
             }
         }
-    }
-
-    private void initSwipeRefreshLayout(){
-
-        swipeRefreshLayout.setOnRefreshListener(
-                new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        if(currentFragment!=null){
-
-                            switch (currentFragmentIndex) {
-                                case FRAGMENT_RSS_CARD_VIEW:
-                                    CardViewFragment fragment = (CardViewFragment) currentFragment;
-                                    fragment.loadRSS();
-                                    break;
-                                default:
-                                    stopLoaderRefreshLayout();
-                                    break;
-                            }
-                        }
-                    }
-                }
-        );
     }
 
     private void initBackDrop(){
@@ -163,10 +147,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void stopLoaderRefreshLayout(){
-        swipeRefreshLayout.setRefreshing(false);
-    }
-
     private void initFragmentManager(){
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
@@ -191,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
 
         Fragment fragment = null;
         Boolean bBackStack = false;
-        currentFragmentIndex = fragmentIndex;
+        String tagFragment = FRAGMENT_TAG_CARD;
 
         switch (fragmentIndex) {
             case FRAGMENT_RSS_CARD_VIEW:
@@ -201,16 +181,19 @@ public class MainActivity extends AppCompatActivity {
             case FRAGMENT_RSS_DETAIL:
                 fragment = new DetailFragment();
                 appBarLayout.setExpanded(false);
+                tagFragment = FRAGMENT_TAG_DETAIL;
                 bBackStack = true;
                 break;
             case FRAGMENT_WEB_VIEW:
                 fragment = new WebViewFragment();
                 appBarLayout.setExpanded(false);
+                tagFragment = FRAGMENT_TAG_WEB;
                 bBackStack = true;
                 break;
             case FRAGMENT_SETTINGS:
                 fragment = new SettingsFragment();
                 appBarLayout.setExpanded(false);
+                tagFragment = FRAGMENT_TAG_SETTINGS;
                 bBackStack = true;
                 break;
             default:
@@ -218,10 +201,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (fragment != null) {
-            currentFragment = fragment;
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.container_body, fragment);
+            fragmentTransaction.replace(R.id.container_body, fragment, tagFragment);
             if(bBackStack){
                 fragmentTransaction.addToBackStack(null);
             }

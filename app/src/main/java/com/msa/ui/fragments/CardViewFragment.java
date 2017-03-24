@@ -3,6 +3,7 @@ package com.msa.ui.fragments;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,7 +17,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.msa.ui.MainActivity;
 import com.msa.ui.R;
 import com.msa.ui.adapters.RssItem;
 import com.msa.ui.adapters.RssItemsAdapter;
@@ -40,6 +40,7 @@ public class CardViewFragment extends Fragment {
     private RssItemsAdapter adapter;
     private List<RssItem> rssItemList;
     private DownloadXmlTask downloadXmlTask;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public CardViewFragment() {
     }
@@ -57,6 +58,7 @@ public class CardViewFragment extends Fragment {
         rssItemList  = new ArrayList<>();
         adapter      = new RssItemsAdapter(getActivity(), rssItemList);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        swipeRefreshLayout  = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeContainer);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -69,12 +71,30 @@ public class CardViewFragment extends Fragment {
             downloadXmlTask.execute(URL);
         }
 
+        initSwipeRefreshLayout();
+
         return rootView;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    private void initSwipeRefreshLayout(){
+
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        loadRSS();
+                    }
+                }
+        );
+    }
+
+    public void stopLoaderRefreshLayout(){
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     public void loadRSS(){
@@ -84,9 +104,7 @@ public class CardViewFragment extends Fragment {
             adapter.notifyDataSetChanged();
             downloadXmlTask.execute(URL);
         } else {
-            if(getActivity()!=null){
-                ((MainActivity)getActivity()).stopLoaderRefreshLayout();
-            }
+            stopLoaderRefreshLayout();
         }
     }
 
@@ -105,9 +123,7 @@ public class CardViewFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String result) {
-            if(getActivity()!=null){
-                ((MainActivity)getActivity()).stopLoaderRefreshLayout();
-            }
+            stopLoaderRefreshLayout();
         }
     }
 
@@ -161,9 +177,28 @@ public class CardViewFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+
                         /**
-                         * todo faire la gestion avec une cardview et un message explicite
+                         * 404 not found for fun
+                         * To try modify final URL ;)
                          * */
+
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.FRENCH);
+                        String strDate = dateFormat.format(new Date());
+
+                        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.FRENCH);
+                        String strTime = timeFormat.format(new Date());
+
+                        RssItem a = new RssItem(
+                                getString(R.string.page_not_found),
+                                "http://www.geeksleague.be/wp-content/uploads/2013/11/exemple-page-erreur-404-620x320.png",
+                                strDate,
+                                strTime,
+                                getString(R.string.page_not_found_desc),
+                                "https://s3.amazonaws.com/wp-ag/wp-content/uploads/sites/72/2015/05/chuck-norris-approves.gif");
+
+                        rssItemList.add(a);
+                        adapter.notifyDataSetChanged();
                     }
                 });
 
