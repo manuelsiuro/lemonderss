@@ -250,7 +250,4 @@ public class MainActivity extends AppCompatActivity {
     public PreferencesManager getPrefs() {
         return prefs;
     }
-
-
-
 }
