@@ -7,4 +7,5 @@
     <string name="toolbar_setting">Paramètres</string>
     <string name="settings_only_wifi">Charger le flux RSS quand le WIFI est activé</string>
     <string name="no_internet_connexion">Pas de connection internet</string>
+    <string name="wait_loading">Chargement en cours.</string>
 </resources>

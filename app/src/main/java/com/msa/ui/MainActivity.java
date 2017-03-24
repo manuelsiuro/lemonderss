@@ -55,8 +55,7 @@ public class MainActivity extends AppCompatActivity {
         appBarLayout        = (AppBarLayout) findViewById(R.id.appbar);
         backdrop            = (ImageView) findViewById(R.id.backdrop);
         snackBarCoordinator = (CoordinatorLayout)findViewById(R.id.snackbarlocation);
-
-        prefs = new PreferencesManager(this);
+        prefs               = new PreferencesManager(this);
 
         setSupportActionBar(toolbar);
         initCollapsingToolbar();
@@ -85,6 +84,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void showSnackMessage(String message){
+        Snackbar snackbar = Snackbar.make(snackBarCoordinator, message, Snackbar.LENGTH_LONG);
+        snackbar.show();
+    }
+
     private void displayViewDependWifiStatus(){
 
         if(prefs.getSettingsWifi()){
@@ -96,8 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 displayView(FRAGMENT_RSS_CARD_VIEW);
             } else {
                 displayView(FRAGMENT_SETTINGS);
-                Snackbar snackbar = Snackbar.make(snackBarCoordinator, getString(R.string.no_internet_connexion), Snackbar.LENGTH_LONG);
-                snackbar.show();
+                showSnackMessage(getString(R.string.no_internet_connexion));
             }
         }
     }
