@@ -10,4 +10,5 @@
     <string name="wait_loading">Chargement en cours.</string>
     <string name="page_not_found">Erreure de chargement</string>
     <string name="page_not_found_desc">Le site Le Monde.fr est inaccessible</string>
+    <string name="read_news">Ecouter l\'article</string>
 </resources>

@@ -2,6 +2,7 @@ package com.msa.ui.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +15,13 @@ import com.msa.ui.MainActivity;
 import com.msa.ui.R;
 import com.msa.ui.adapters.RssItem;
 
+import java.util.Locale;
+
 public class DetailFragment extends Fragment {
 
     private final int FRAGMENT_WEB_VIEW = 2;
     private Context mContext;
+    private TextToSpeech tts;
 
     public DetailFragment() {}
 
@@ -34,10 +38,11 @@ public class DetailFragment extends Fragment {
 
         final RssItem rssItem   = ((MainActivity)getActivity()).getRssItem();
         ImageView thumbnail     = (ImageView) rootView.findViewById(R.id.thumbnail);
-        TextView title          = (TextView) rootView.findViewById(R.id.title);
+        final TextView title          = (TextView) rootView.findViewById(R.id.title);
         TextView datetime       = (TextView) rootView.findViewById(R.id.datetime);
-        TextView description    = (TextView) rootView.findViewById(R.id.description);
+        final TextView description    = (TextView) rootView.findViewById(R.id.description);
         TextView txt_open_link  = (TextView) rootView.findViewById(R.id.txt_open_link);
+        TextView txt_tts_link   = (TextView) rootView.findViewById(R.id.txt_tts_link);
 
         Glide.with(getActivity()).load(rssItem.getEnclosure()).into(thumbnail);
 
@@ -50,6 +55,23 @@ public class DetailFragment extends Fragment {
             public void onClick(View view) {
                 ((MainActivity)mContext).setRssItem(rssItem);
                 ((MainActivity)mContext).displayView(FRAGMENT_WEB_VIEW);
+            }
+        });
+
+        tts = new TextToSpeech(mContext, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != TextToSpeech.ERROR) {
+                    tts.setLanguage(Locale.FRENCH);
+                }
+            }
+        });
+
+        txt_tts_link.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String message = title.getText() + ". " + description.getText() + ".";
+                tts.speak(message, TextToSpeech.QUEUE_FLUSH, null);
             }
         });
 

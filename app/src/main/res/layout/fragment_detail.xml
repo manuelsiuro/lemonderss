@@ -47,7 +47,7 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp">
+                    android:layout_marginTop="@dimen/rss_detail_footer_margin">
 
                     <ImageView
                         android:id="@+id/ic_link"
@@ -57,15 +57,54 @@
                         android:layout_weight="1"
                         android:layout_marginStart="@dimen/rss_title_padding"
                         android:layout_marginLeft="@dimen/rss_title_padding"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="@dimen/rss_title_margin"
+                        android:layout_marginRight="@dimen/rss_title_margin"
                         android:paddingTop="@dimen/rss_title_padding_top"
-                        android:layout_width="60dp"
+                        android:layout_width="@dimen/rss_detail_footer_icon"
                         android:contentDescription="@string/app_name" />
 
                     <TextView
                         android:id="@+id/txt_open_link"
                         android:text="@string/read_on_website"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/rss_title"
+                        android:paddingBottom="@dimen/rss_padding_bottom"
+                        android:paddingStart="@dimen/rss_title_padding"
+                        android:paddingLeft="@dimen/rss_title_padding"
+                        android:paddingEnd="@dimen/rss_date_padding_right"
+                        android:paddingRight="@dimen/rss_date_padding_right"
+                        android:layout_weight="1"
+                        android:paddingTop="@dimen/rss_title_padding_top" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/card_tts_footer"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/rss_detail_footer_margin"
+                    android:layout_marginBottom="@dimen/rss_detail_footer_margin"
+                    >
+
+                    <ImageView
+                        android:id="@+id/ic_tts"
+                        android:layout_height="wrap_content"
+                        android:scaleType="center"
+                        android:src="@drawable/ic_hearing_black_24dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="@dimen/rss_title_padding"
+                        android:layout_marginLeft="@dimen/rss_title_padding"
+                        android:layout_marginEnd="@dimen/rss_title_margin"
+                        android:layout_marginRight="@dimen/rss_title_margin"
+                        android:paddingTop="@dimen/rss_title_padding_top"
+                        android:layout_width="@dimen/rss_detail_footer_icon"
+                        android:contentDescription="@string/app_name" />
+
+                    <TextView
+                        android:id="@+id/txt_tts_link"
+                        android:text="@string/read_news"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/rss_title"

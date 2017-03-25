@@ -10,9 +10,13 @@
     <dimen name="card_rss_radius">0dp</dimen>
     <dimen name="rss_thumbnail_height">160dp</dimen>
     <dimen name="rss_title_padding">10dp</dimen>
+    <dimen name="rss_title_margin">10dp</dimen>
     <dimen name="rss_title">18sp</dimen>
     <dimen name="rss_description">18sp</dimen>
     <dimen name="rss_padding_bottom">5dp</dimen>
     <dimen name="rss_date_padding_right">20dp</dimen>
     <dimen name="rss_title_padding_top">5dp</dimen>
+    <dimen name="rss_detail_footer_margin">15dp</dimen>
+    <dimen name="rss_detail_footer_icon">60dp</dimen>
+    <dimen name="settings_margin">5dp</dimen>
 </resources>
