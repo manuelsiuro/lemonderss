@@ -11,17 +11,16 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.msa.ui.adapters.RssItem;
+import com.msa.ui.cache.CacheManager;
 import com.msa.ui.fragments.CardViewFragment;
 import com.msa.ui.fragments.DetailFragment;
 import com.msa.ui.fragments.SettingsFragment;
@@ -46,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private RssItem rssItem;
     private PreferencesManager prefs;
     private CoordinatorLayout snackBarCoordinator;
+    private CacheManager cacheManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +56,10 @@ public class MainActivity extends AppCompatActivity {
         appBarLayout        = (AppBarLayout) findViewById(R.id.appbar);
         backdrop            = (ImageView) findViewById(R.id.backdrop);
         snackBarCoordinator = (CoordinatorLayout)findViewById(R.id.snackbarlocation);
-
+        cacheManager        = new CacheManager(this);
         prefs               = new PreferencesManager(this);
+
+        cacheManager.deleteCache();
 
         setSupportActionBar(toolbar);
         initCollapsingToolbar();
@@ -203,6 +205,12 @@ public class MainActivity extends AppCompatActivity {
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            fragmentTransaction.setCustomAnimations(R.anim.fragment_slide_left_enter,
+                    R.anim.fragment_slide_left_exit,
+                    R.anim.fragment_slide_right_enter,
+                    R.anim.fragment_slide_right_exit);
+
             fragmentTransaction.replace(R.id.container_body, fragment, tagFragment);
             if(bBackStack){
                 fragmentTransaction.addToBackStack(null);
