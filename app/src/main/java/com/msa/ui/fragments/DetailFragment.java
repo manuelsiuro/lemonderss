@@ -36,13 +36,13 @@ public class DetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         mContext = getActivity();
 
-        final RssItem rssItem   = ((MainActivity)getActivity()).getRssItem();
-        ImageView thumbnail     = (ImageView) rootView.findViewById(R.id.thumbnail);
-        final TextView title          = (TextView) rootView.findViewById(R.id.title);
-        TextView datetime       = (TextView) rootView.findViewById(R.id.datetime);
-        final TextView description    = (TextView) rootView.findViewById(R.id.description);
-        TextView txt_open_link  = (TextView) rootView.findViewById(R.id.txt_open_link);
-        TextView txt_tts_link   = (TextView) rootView.findViewById(R.id.txt_tts_link);
+        final RssItem rssItem       = ((MainActivity)getActivity()).getRssItem();
+        ImageView thumbnail         = (ImageView) rootView.findViewById(R.id.thumbnail);
+        final TextView title        = (TextView) rootView.findViewById(R.id.title);
+        TextView datetime           = (TextView) rootView.findViewById(R.id.datetime);
+        final TextView description  = (TextView) rootView.findViewById(R.id.description);
+        TextView txt_open_link      = (TextView) rootView.findViewById(R.id.txt_open_link);
+        TextView txt_tts_link       = (TextView) rootView.findViewById(R.id.txt_tts_link);
 
         Glide.with(getActivity()).load(rssItem.getEnclosure()).into(thumbnail);
 
