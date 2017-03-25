@@ -1,6 +1,5 @@
 package com.msa.ui.fragments;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -39,7 +38,6 @@ public class CardViewFragment extends Fragment {
     private RecyclerView recyclerView;
     private RssItemsAdapter adapter;
     private List<RssItem> rssItemList;
-    private DownloadXmlTask downloadXmlTask;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     public CardViewFragment() {
@@ -65,12 +63,7 @@ public class CardViewFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-        downloadXmlTask = new DownloadXmlTask();
-
-        if(downloadXmlTask.getStatus() == AsyncTask.Status.PENDING ) {
-            downloadXmlTask.execute(URL);
-        }
-
+        getURL(URL);
         initSwipeRefreshLayout();
 
         return rootView;
@@ -87,7 +80,9 @@ public class CardViewFragment extends Fragment {
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        loadRSS();
+                        rssItemList.clear();
+                        adapter.notifyDataSetChanged();
+                        getURL(URL);
                     }
                 }
         );
@@ -97,38 +92,7 @@ public class CardViewFragment extends Fragment {
         swipeRefreshLayout.setRefreshing(false);
     }
 
-    public void loadRSS(){
-
-        if(downloadXmlTask.getStatus() != AsyncTask.Status.FINISHED ) {
-            rssItemList.clear();
-            adapter.notifyDataSetChanged();
-            downloadXmlTask.execute(URL);
-        } else {
-            stopLoaderRefreshLayout();
-        }
-    }
-
-    private class DownloadXmlTask extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... urls) {
-            try {
-                return downloadUrl(urls[0]);
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-                e.printStackTrace();
-                return getResources().getString(R.string.connection_error);
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            stopLoaderRefreshLayout();
-        }
-    }
-
-    private String downloadUrl(String urlString) throws IOException {
-
+    public void getURL(String urlString){
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, urlString,
@@ -168,6 +132,7 @@ public class CardViewFragment extends Fragment {
                             }
 
                             adapter.notifyDataSetChanged();
+                            stopLoaderRefreshLayout();
 
                         } catch (XmlPullParserException | IOException | ParseException e) {
                             e.printStackTrace();
@@ -199,11 +164,10 @@ public class CardViewFragment extends Fragment {
 
                         rssItemList.add(a);
                         adapter.notifyDataSetChanged();
+                        stopLoaderRefreshLayout();
                     }
                 });
 
         requestQueue.add(stringRequest);
-
-        return "";
     }
 }
