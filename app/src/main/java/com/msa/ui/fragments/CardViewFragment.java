@@ -24,6 +24,8 @@ import com.msa.ui.parser.RssXmlParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -107,8 +109,11 @@ public class CardViewFragment extends Fragment {
                             /**
                              * todo: problème encodage ponctuel ??? sur la réponse, le fix ne fonctionne pas toujours @arg#! ;(
                              * */
+                            //String newStr = URLDecoder.decode(URLEncoder.encode(response, "iso8859-1"),"UTF-8");
+                            //items = rssXmlParser.parse(newStr);
                             items = rssXmlParser.parse(new String(response.getBytes("ISO-8859-1"), "UTF-8"));
                             //items = rssXmlParser.parse(new String(response.getBytes("UTF-8"), "ISO-8859-1"));
+                            //items = rssXmlParser.parse(response);
 
                             for (RssXmlParser.Item entry : items) {
 
