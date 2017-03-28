@@ -6,43 +6,43 @@
         <item
             android:id="@+id/inbox"
             android:checked="false"
-            android:icon="@drawable/ic_dots"
-            android:title="inbox" />
+            android:icon="@android:drawable/ic_dialog_info"
+            android:title="Nice Matin" />
 
         <item
             android:id="@+id/starred"
             android:checked="false"
-            android:icon="@drawable/ic_dots"
-            android:title="starred" />
+            android:icon="@android:drawable/ic_dialog_info"
+            android:title="Le Parisien" />
 
         <item
             android:id="@+id/sent_mail"
             android:checked="false"
-            android:icon="@drawable/ic_dots"
-            android:title="sent_mail" />
+            android:icon="@android:drawable/ic_dialog_info"
+            android:title="Les Echos" />
 
         <item
             android:id="@+id/drafts"
             android:checked="false"
-            android:icon="@drawable/ic_dots"
-            android:title="drafts" />
+            android:icon="@android:drawable/ic_dialog_info"
+            android:title="L'obs" />
 
 
         <item
             android:id="@+id/allmail"
             android:checked="false"
-            android:icon="@drawable/ic_dots"
-            android:title="allmail" />
+            android:icon="@android:drawable/ic_dialog_info"
+            android:title="Science et Avenir" />
         <item
             android:id="@+id/trash"
             android:checked="false"
-            android:icon="@drawable/ic_dots"
-            android:title="trash" />
+            android:icon="@android:drawable/ic_dialog_info"
+            android:title="Fr Android" />
         <item
             android:id="@+id/spam"
             android:checked="false"
-            android:icon="@drawable/ic_dots"
-            android:title="spam" />
+            android:icon="@android:drawable/ic_dialog_info"
+            android:title="Android MT" />
 
     </group>
 </menu>
