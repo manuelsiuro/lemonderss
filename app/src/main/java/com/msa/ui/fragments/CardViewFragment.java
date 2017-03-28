@@ -6,10 +6,12 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -28,8 +30,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 
 public class CardViewFragment extends Fragment {
@@ -98,16 +102,17 @@ public class CardViewFragment extends Fragment {
         swipeRefreshLayout.setRefreshing(false);
     }
 
-    public void getURL(String urlString){
+    public void getURL(String urlString) {
 
-        System.out.println("CardViewFragment getURL");
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
 
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, urlString,
-                new Response.Listener<String>() {
+        StringRequest postRequest = new StringRequest(Request.Method.GET, urlString,
+                new Response.Listener<String>()
+                {
                     @Override
                     public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
 
                         System.out.println("CardViewFragment getURL onResponse");
 
@@ -120,9 +125,9 @@ public class CardViewFragment extends Fragment {
                              * */
                             //String newStr = URLDecoder.decode(URLEncoder.encode(response, "iso8859-1"),"UTF-8");
                             //items = rssXmlParser.parse(newStr);
-                            items = rssXmlParser.parse(new String(response.getBytes("ISO-8859-1"), "UTF-8"));
+                            //items = rssXmlParser.parse(new String(response.getBytes("ISO-8859-1"), "UTF-8"));
                             //items = rssXmlParser.parse(new String(response.getBytes("UTF-8"), "ISO-8859-1"));
-                            //items = rssXmlParser.parse(response);
+                            items = rssXmlParser.parse(new String(response.getBytes("UTF-8")));
 
                             for (RssXmlParser.Item entry : items) {
 
@@ -151,13 +156,15 @@ public class CardViewFragment extends Fragment {
                         } catch (XmlPullParserException | IOException | ParseException e) {
                             e.printStackTrace();
                         }
+
                     }
                 },
-                new Response.ErrorListener() {
+                new Response.ErrorListener()
+                {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
-                        System.out.println("CardViewFragment getURL onErrorResponse");
+                        // TODO Auto-generated method stub
+                        Log.d("ERROR","error => "+error.toString());
 
                         /**
                          * 404 not found for fun
@@ -182,8 +189,19 @@ public class CardViewFragment extends Fragment {
                         adapter.notifyDataSetChanged();
                         stopLoaderRefreshLayout();
                     }
-                });
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                System.out.println("getHeaders - getHeaders - getHeaders");
+                Map<String, String> params = new HashMap<>();
+                params.put("Content-Type", "text/xml, charset=UTF-8");
+                params.put("Accept", "application/xhtml+xml, charset=utf-8");
 
-        requestQueue.add(stringRequest);
+                return params;
+            }
+        };
+        queue.add(postRequest);
+
     }
 }
