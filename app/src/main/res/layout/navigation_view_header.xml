@@ -1,49 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="190dp"
-    android:background="@drawable/header_background"
+    android:background="@color/primary_dark"
     android:orientation="vertical"
-    >
+    android:layout_height="@dimen/nvh_height">
 
     <de.hdodenhof.circleimageview.CircleImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/profile_image"
-        android:layout_width="76dp"
-        android:layout_height="76dp"
+        android:layout_width="@dimen/nvh_circle"
+        android:layout_height="@dimen/nvh_circle"
         android:src="@drawable/photo"
-        app:border_color="#FF000000"
-        android:layout_marginLeft="24dp"
-        android:layout_centerVertical="true"
+        android:layout_centerVertical="false"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="24dp" />
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        app:border_color="@color/colorPrimary"
+        app:border_width="@dimen/nvh_circle_border"/>
 
     <TextView
+        android:id="@+id/header_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="RSS"
-        android:textSize="14sp"
-        android:textColor="#FFF"
+        android:text="@string/nvh_title"
+        android:textSize="@dimen/nvh_font_title"
+        android:textColor="@color/colorPrimary"
         android:textStyle="bold"
-        android:gravity="left"
-        android:paddingBottom="4dp"
-        android:id="@+id/header_title"
-        android:layout_above="@+id/current_rss"
+        android:gravity="start"
+        android:layout_above="@+id/header_subtitle"
         android:layout_alignLeft="@+id/profile_image"
         android:layout_alignStart="@+id/profile_image" />
 
     <TextView
+        android:id="@+id/header_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Liste des flux"
-        android:id="@+id/current_rss"
-        android:gravity="left"
-        android:layout_marginBottom="8dp"
-        android:textSize="14sp"
-        android:textColor="#fff"
+        android:text="@string/nvh_subtitle"
+        android:gravity="start"
+        android:textSize="@dimen/nvh_font_subtitle"
+        android:textColor="@color/colorPrimary"
         android:layout_alignParentBottom="true"
         android:layout_alignLeft="@+id/header_title"
-        android:layout_alignStart="@+id/header_title" />
+        android:layout_alignStart="@+id/header_title"
+        android:layout_marginBottom="@dimen/activity_vertical_margin" />
 
 </RelativeLayout>

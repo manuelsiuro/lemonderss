@@ -4,45 +4,50 @@
     <group android:checkableBehavior="single">
 
         <item
-            android:id="@+id/inbox"
-            android:checked="false"
-            android:icon="@android:drawable/ic_dialog_info"
-            android:title="Nice Matin" />
+            android:id="@+id/le_monde"
+            android:checked="true"
+            android:icon="@drawable/ic_rss"
+            android:title="@string/nav_menu_lemonde" />
 
         <item
-            android:id="@+id/starred"
+            android:id="@+id/nice_matin"
             android:checked="false"
-            android:icon="@android:drawable/ic_dialog_info"
-            android:title="Le Parisien" />
+            android:icon="@drawable/ic_rss"
+            android:title="@string/nav_menu_nicematin" />
 
         <item
-            android:id="@+id/sent_mail"
+            android:id="@+id/le_parisien"
             android:checked="false"
-            android:icon="@android:drawable/ic_dialog_info"
-            android:title="Les Echos" />
+            android:icon="@drawable/ic_rss"
+            android:title="@string/nav_menu_leparisien" />
 
         <item
-            android:id="@+id/drafts"
+            android:id="@+id/les_echos"
             android:checked="false"
-            android:icon="@android:drawable/ic_dialog_info"
-            android:title="L'obs" />
+            android:icon="@drawable/ic_rss"
+            android:title="@string/nav_menu_lesechos" />
 
+        <item
+            android:id="@+id/lobs"
+            android:checked="false"
+            android:icon="@drawable/ic_rss"
+            android:title="@string/nav_menu_lobs" />
 
         <item
-            android:id="@+id/allmail"
+            android:id="@+id/science_et_avenir"
             android:checked="false"
-            android:icon="@android:drawable/ic_dialog_info"
-            android:title="Science et Avenir" />
+            android:icon="@drawable/ic_rss"
+            android:title="@string/nav_menu_scienceetavenir" />
         <item
-            android:id="@+id/trash"
+            android:id="@+id/fr_android"
             android:checked="false"
-            android:icon="@android:drawable/ic_dialog_info"
-            android:title="Fr Android" />
+            android:icon="@drawable/ic_rss"
+            android:title="@string/nav_menu_frandroid" />
         <item
-            android:id="@+id/spam"
+            android:id="@+id/android_mt"
             android:checked="false"
-            android:icon="@android:drawable/ic_dialog_info"
-            android:title="Android MT" />
+            android:icon="@drawable/ic_rss"
+            android:title="@string/nav_menu_androidmt" />
 
     </group>
 </menu>

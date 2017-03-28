@@ -52,6 +52,8 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <include layout="@layout/content_frame" />
+
     <FrameLayout
         android:id="@+id/container_body"
         android:layout_width="fill_parent"

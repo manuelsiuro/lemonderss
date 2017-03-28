@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.msa.ui.MainActivity;
+import com.msa.ui.MainActivityDrawer;
 import com.msa.ui.R;
 import com.msa.ui.adapters.RssItem;
 
@@ -36,7 +36,7 @@ public class DetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         mContext = getActivity();
 
-        final RssItem rssItem       = ((MainActivity)getActivity()).getRssItem();
+        final RssItem rssItem       = ((MainActivityDrawer)getActivity()).getRssItem();
         ImageView thumbnail         = (ImageView) rootView.findViewById(R.id.thumbnail);
         final TextView title        = (TextView) rootView.findViewById(R.id.title);
         TextView datetime           = (TextView) rootView.findViewById(R.id.datetime);
@@ -53,8 +53,8 @@ public class DetailFragment extends Fragment {
         txt_open_link.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity)mContext).setRssItem(rssItem);
-                ((MainActivity)mContext).displayView(FRAGMENT_WEB_VIEW);
+                ((MainActivityDrawer)mContext).setRssItem(rssItem);
+                ((MainActivityDrawer)mContext).loadFragment(FRAGMENT_WEB_VIEW);
             }
         });
 
@@ -81,5 +81,10 @@ public class DetailFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        if(tts!=null){
+            tts.stop();
+            tts.shutdown();
+            tts = null;
+        }
     }
 }

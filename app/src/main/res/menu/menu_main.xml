@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/settings"
-        android:icon="@drawable/ic_dots"
+        android:icon="@android:drawable/ic_menu_more"
         app:showAsAction="ifRoom"
         android:title="@string/toolbar_setting">
     </item>

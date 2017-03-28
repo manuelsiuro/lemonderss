@@ -19,4 +19,15 @@
     <dimen name="rss_detail_footer_margin">15dp</dimen>
     <dimen name="rss_detail_footer_icon">60dp</dimen>
     <dimen name="settings_margin">5dp</dimen>
+
+    <!-- app_bar_main -->
+    <dimen name="appbar_height">150dp</dimen>
+
+    <!-- navigation_view_header -->
+    <dimen name="nvh_height">150dp</dimen>
+    <dimen name="nvh_circle">67dp</dimen>
+    <dimen name="nvh_circle_border">2dp</dimen>
+    <dimen name="nvh_font_title">14sp</dimen>
+    <dimen name="nvh_font_subtitle">12sp</dimen>
+
 </resources>

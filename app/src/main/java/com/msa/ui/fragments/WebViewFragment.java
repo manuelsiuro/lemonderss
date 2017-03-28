@@ -11,7 +11,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.msa.ui.MainActivity;
+import com.msa.ui.MainActivityDrawer;
 import com.msa.ui.R;
 import com.msa.ui.adapters.RssItem;
 
@@ -33,7 +33,7 @@ public class WebViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         final View rootView     = inflater.inflate(R.layout.fragment_webview, container, false);
-        final RssItem rssItem   = ((MainActivity)getActivity()).getRssItem();
+        final RssItem rssItem   = ((MainActivityDrawer)getActivity()).getRssItem();
         mWebView                = (WebView) rootView.findViewById(R.id.webview);
 
         progressBar = new ProgressDialog(getActivity());
@@ -64,7 +64,9 @@ public class WebViewFragment extends Fragment {
 
             @Override
             public void onPageFinished(WebView view, String url){
-                mWebView.setVisibility(View.VISIBLE);
+                if(mWebView!=null){
+                    mWebView.setVisibility(View.VISIBLE);
+                }
             }
         });
 

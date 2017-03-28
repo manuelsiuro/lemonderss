@@ -24,8 +24,6 @@ import com.msa.ui.parser.RssXmlParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,6 +35,7 @@ import java.util.Locale;
 public class CardViewFragment extends Fragment {
 
     private static final String URL = "http://www.lemonde.fr/rss/une.xml";
+    //private static final String URL = "http://www.nicematin.com/ville/cote-d-azur/rss";
     private RecyclerView recyclerView;
     private RssItemsAdapter adapter;
     private List<RssItem> rssItemList;
@@ -48,10 +47,13 @@ public class CardViewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        System.out.println("CardViewFragment onCreate");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        System.out.println("CardViewFragment onCreateView");
 
         View rootView = inflater.inflate(R.layout.fragment_cardview, container, false);
 
@@ -78,6 +80,8 @@ public class CardViewFragment extends Fragment {
 
     private void initSwipeRefreshLayout(){
 
+        System.out.println("CardViewFragment initSwipeRefreshLayout");
+
         swipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
@@ -95,12 +99,17 @@ public class CardViewFragment extends Fragment {
     }
 
     public void getURL(String urlString){
+
+        System.out.println("CardViewFragment getURL");
+
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, urlString,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+
+                        System.out.println("CardViewFragment getURL onResponse");
 
                         RssXmlParser rssXmlParser = new RssXmlParser();
                         List<RssXmlParser.Item> items;
@@ -147,6 +156,8 @@ public class CardViewFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+
+                        System.out.println("CardViewFragment getURL onErrorResponse");
 
                         /**
                          * 404 not found for fun

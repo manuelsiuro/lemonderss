@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.msa.ui.MainActivity;
+import com.msa.ui.MainActivityDrawer;
 import com.msa.ui.R;
 
 import java.util.List;
@@ -59,16 +59,16 @@ public class RssItemsAdapter extends RecyclerView.Adapter<RssItemsAdapter.MyView
         holder.thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity)mContext).setRssItem(rssItem);
-                ((MainActivity)mContext).displayView(FRAGMENT_RSS_DETAIL);
+                ((MainActivityDrawer)mContext).setRssItem(rssItem);
+                ((MainActivityDrawer)mContext).loadFragment(FRAGMENT_RSS_DETAIL);
             }
         });
 
         holder.title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity)mContext).setRssItem(rssItem);
-                ((MainActivity)mContext).displayView(FRAGMENT_RSS_DETAIL);
+                ((MainActivityDrawer)mContext).setRssItem(rssItem);
+                ((MainActivityDrawer)mContext).loadFragment(FRAGMENT_RSS_DETAIL);
             }
         });
     }

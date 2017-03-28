@@ -13,4 +13,20 @@
     <string name="read_news">Ecouter l\'article</string>
     <string name="openDrawer">Open Drawer</string>
     <string name="closeDrawer">Close drawer</string>
+
+    <!-- menu_navigation_view -->
+    <string name="nav_menu_lemonde">Le Monde.fr</string>
+    <string name="nav_menu_nicematin">Nice Matin</string>
+    <string name="nav_menu_leparisien">Le Parisien</string>
+    <string name="nav_menu_lesechos">Les Echos</string>
+    <string name="nav_menu_lobs">L\'Obs</string>
+    <string name="nav_menu_scienceetavenir">Science et Avenir</string>
+    <string name="nav_menu_frandroid">Fr Android</string>
+    <string name="nav_menu_androidmt">Android MT</string>
+
+    <!-- navigation_view_header -->
+    <string name="nvh_title">RSS</string>
+    <string name="nvh_subtitle">Liste des flux</string>
+
+
 </resources>

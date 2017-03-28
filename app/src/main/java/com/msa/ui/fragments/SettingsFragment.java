@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
-import com.msa.ui.MainActivity;
+import com.msa.ui.MainActivityDrawer;
 import com.msa.ui.R;
 import com.msa.ui.preferences.PreferencesManager;
 
@@ -26,7 +26,7 @@ public class SettingsFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
         Switch switch_wifi = (Switch) rootView.findViewById(R.id.switch_wifi);
-        final PreferencesManager prefs = ((MainActivity)getActivity()).getPrefs();
+        final PreferencesManager prefs = ((MainActivityDrawer)getActivity()).getPrefs();
 
         if(prefs.getSettingsWifi()){
             switch_wifi.setChecked(true);
