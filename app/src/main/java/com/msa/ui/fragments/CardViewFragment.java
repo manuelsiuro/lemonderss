@@ -6,7 +6,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.msa.ui.Constants;
 import com.msa.ui.R;
 import com.msa.ui.adapters.RssItem;
 import com.msa.ui.adapters.RssItemsAdapter;
@@ -42,11 +42,6 @@ import java.util.Map;
 
 public class CardViewFragment extends Fragment {
 
-
-
-    //private static final String URL = "http://www.lemonde.fr/rss/une.xml";
-    //private static final String URL = "http://www.nicematin.com/ville/cote-d-azur/rss";
-    //private static final String URL = "http://tempsreel.nouvelobs.com/rss.xml";
     private String rssURL;
     private RecyclerView recyclerView;
     private RssItemsAdapter adapter;
@@ -84,7 +79,7 @@ public class CardViewFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-        String rssURL = this.getArguments().getString("rssURL");
+        String rssURL = this.getArguments().getString(Constants.BUNDLE.RSS_URL);
         setRssURL(rssURL);
         httpRequest(rssURL);
 
@@ -130,14 +125,7 @@ public class CardViewFragment extends Fragment {
                         List<RssXmlParser.Item> items;
 
                         try {
-                            /**
-                             * todo: problème encodage ponctuel ??? sur la réponse, le fix ne fonctionne pas toujours @arg#! ;(
-                             * */
-                            //String newStr = URLDecoder.decode(URLEncoder.encode(response, "iso8859-1"),"UTF-8");
-                            //items = rssXmlParser.parse(newStr);
-                            //items = rssXmlParser.parse(new String(response.getBytes("ISO-8859-1"), "UTF-8"));
-                            //items = rssXmlParser.parse(new String(response.getBytes("UTF-8"), "ISO-8859-1"));
-                            //items = rssXmlParser.parse(new String(response.getBytes("UTF-8")));
+
                             items = rssXmlParser.parse(response);
 
                             for (RssXmlParser.Item entry : items) {
@@ -173,8 +161,6 @@ public class CardViewFragment extends Fragment {
                 {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
-                        Log.d("ERROR","error => "+error.toString());
 
                         /**
                          * 404 not found for fun
@@ -228,11 +214,6 @@ public class CardViewFragment extends Fragment {
                     } else {
                         return Response.success(stringRequest, HttpHeaderParser.parseCacheHeaders(response));
                     }
-
-
-
-
-
 
                 } catch (UnsupportedEncodingException e) {
                     return Response.error(new ParseError(e));

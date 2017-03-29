@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.msa.ui.Constants;
 import com.msa.ui.MainActivityDrawer;
 import com.msa.ui.R;
 import com.msa.ui.adapters.RssItem;
@@ -19,7 +20,6 @@ import java.util.Locale;
 
 public class DetailFragment extends Fragment {
 
-    private final int FRAGMENT_WEB_VIEW = 2;
     private Context mContext;
     private TextToSpeech tts;
 
@@ -54,7 +54,7 @@ public class DetailFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 ((MainActivityDrawer)mContext).setRssItem(rssItem);
-                ((MainActivityDrawer)mContext).loadFragment(FRAGMENT_WEB_VIEW);
+                ((MainActivityDrawer)mContext).loadFragment(Constants.FRAGMENT.WEB_VIEW);
             }
         });
 

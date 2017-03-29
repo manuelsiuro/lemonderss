@@ -19,7 +19,6 @@ public class RssItemsAdapter extends RecyclerView.Adapter<RssItemsAdapter.MyView
 
     private Context mContext;
     private List<RssItem> rssItemList;
-    private final int FRAGMENT_RSS_DETAIL   = 1;
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView thumbnail;
@@ -61,7 +60,7 @@ public class RssItemsAdapter extends RecyclerView.Adapter<RssItemsAdapter.MyView
             @Override
             public void onClick(View view) {
                 ((MainActivityDrawer)mContext).setRssItem(rssItem);
-                ((MainActivityDrawer)mContext).loadFragment(Constants.FRAGMENT.FRAGMENT_RSS_DETAIL);
+                ((MainActivityDrawer)mContext).loadFragment(Constants.FRAGMENT.RSS_DETAIL);
             }
         });
 
@@ -69,7 +68,7 @@ public class RssItemsAdapter extends RecyclerView.Adapter<RssItemsAdapter.MyView
             @Override
             public void onClick(View view) {
                 ((MainActivityDrawer)mContext).setRssItem(rssItem);
-                ((MainActivityDrawer)mContext).loadFragment(Constants.FRAGMENT.FRAGMENT_RSS_DETAIL);
+                ((MainActivityDrawer)mContext).loadFragment(Constants.FRAGMENT.RSS_DETAIL);
             }
         });
     }
