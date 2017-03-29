@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.msa.ui.Constants;
 import com.msa.ui.MainActivityDrawer;
 import com.msa.ui.R;
 
@@ -60,7 +61,7 @@ public class RssItemsAdapter extends RecyclerView.Adapter<RssItemsAdapter.MyView
             @Override
             public void onClick(View view) {
                 ((MainActivityDrawer)mContext).setRssItem(rssItem);
-                ((MainActivityDrawer)mContext).loadFragment(FRAGMENT_RSS_DETAIL);
+                ((MainActivityDrawer)mContext).loadFragment(Constants.FRAGMENT.FRAGMENT_RSS_DETAIL);
             }
         });
 
@@ -68,7 +69,7 @@ public class RssItemsAdapter extends RecyclerView.Adapter<RssItemsAdapter.MyView
             @Override
             public void onClick(View view) {
                 ((MainActivityDrawer)mContext).setRssItem(rssItem);
-                ((MainActivityDrawer)mContext).loadFragment(FRAGMENT_RSS_DETAIL);
+                ((MainActivityDrawer)mContext).loadFragment(Constants.FRAGMENT.FRAGMENT_RSS_DETAIL);
             }
         });
     }

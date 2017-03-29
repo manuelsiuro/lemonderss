@@ -12,10 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.msa.ui.R;
@@ -26,6 +29,7 @@ import com.msa.ui.parser.RssXmlParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,8 +42,12 @@ import java.util.Map;
 
 public class CardViewFragment extends Fragment {
 
-    private static final String URL = "http://www.lemonde.fr/rss/une.xml";
+
+
+    //private static final String URL = "http://www.lemonde.fr/rss/une.xml";
     //private static final String URL = "http://www.nicematin.com/ville/cote-d-azur/rss";
+    //private static final String URL = "http://tempsreel.nouvelobs.com/rss.xml";
+    private String rssURL;
     private RecyclerView recyclerView;
     private RssItemsAdapter adapter;
     private List<RssItem> rssItemList;
@@ -48,16 +56,21 @@ public class CardViewFragment extends Fragment {
     public CardViewFragment() {
     }
 
+    public String getRssURL() {
+        return rssURL;
+    }
+
+    public void setRssURL(String rssURL) {
+        this.rssURL = rssURL;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        System.out.println("CardViewFragment onCreate");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        System.out.println("CardViewFragment onCreateView");
 
         View rootView = inflater.inflate(R.layout.fragment_cardview, container, false);
 
@@ -71,7 +84,10 @@ public class CardViewFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-        getURL(URL);
+        String rssURL = this.getArguments().getString("rssURL");
+        setRssURL(rssURL);
+        httpRequest(rssURL);
+
         initSwipeRefreshLayout();
 
         return rootView;
@@ -84,15 +100,13 @@ public class CardViewFragment extends Fragment {
 
     private void initSwipeRefreshLayout(){
 
-        System.out.println("CardViewFragment initSwipeRefreshLayout");
-
         swipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
                         rssItemList.clear();
                         adapter.notifyDataSetChanged();
-                        getURL(URL);
+                        httpRequest(getRssURL());
                     }
                 }
         );
@@ -102,19 +116,15 @@ public class CardViewFragment extends Fragment {
         swipeRefreshLayout.setRefreshing(false);
     }
 
-    public void getURL(String urlString) {
+    public void httpRequest(String urlString) {
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
 
-        StringRequest postRequest = new StringRequest(Request.Method.GET, urlString,
+        StringRequest request = new StringRequest(Request.Method.GET, urlString,
                 new Response.Listener<String>()
                 {
                     @Override
                     public void onResponse(String response) {
-                        // response
-                        Log.d("Response", response);
-
-                        System.out.println("CardViewFragment getURL onResponse");
 
                         RssXmlParser rssXmlParser = new RssXmlParser();
                         List<RssXmlParser.Item> items;
@@ -127,7 +137,8 @@ public class CardViewFragment extends Fragment {
                             //items = rssXmlParser.parse(newStr);
                             //items = rssXmlParser.parse(new String(response.getBytes("ISO-8859-1"), "UTF-8"));
                             //items = rssXmlParser.parse(new String(response.getBytes("UTF-8"), "ISO-8859-1"));
-                            items = rssXmlParser.parse(new String(response.getBytes("UTF-8")));
+                            //items = rssXmlParser.parse(new String(response.getBytes("UTF-8")));
+                            items = rssXmlParser.parse(response);
 
                             for (RssXmlParser.Item entry : items) {
 
@@ -156,14 +167,13 @@ public class CardViewFragment extends Fragment {
                         } catch (XmlPullParserException | IOException | ParseException e) {
                             e.printStackTrace();
                         }
-
                     }
                 },
                 new Response.ErrorListener()
                 {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
+
                         Log.d("ERROR","error => "+error.toString());
 
                         /**
@@ -193,15 +203,46 @@ public class CardViewFragment extends Fragment {
         ) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                System.out.println("getHeaders - getHeaders - getHeaders");
                 Map<String, String> params = new HashMap<>();
-                params.put("Content-Type", "text/xml, charset=UTF-8");
-                params.put("Accept", "application/xhtml+xml, charset=utf-8");
-
+                params.put("Content-Type", "application/rss+xml; charset=utf-8");
+                params.put("Content-Type", "text/xml;charset=UTF-8");
                 return params;
             }
-        };
-        queue.add(postRequest);
 
+            @Override
+            protected Response<String> parseNetworkResponse(NetworkResponse response) {
+
+                System.out.println(response.headers);
+
+                try {
+                    System.out.println(response.headers.toString().toLowerCase().indexOf("utf-8"));
+                    //System.out.println(new String( response.data));
+                    System.out.println(response.statusCode);
+
+
+                    String stringRequest = new String( response.data, HttpHeaderParser.parseCharset(response.headers));
+
+                    if(response.headers.toString().toLowerCase().indexOf("utf-8") <= 0){
+
+                        return Response.success(new String(response.data, "UTF-8"), HttpHeaderParser.parseCacheHeaders(response));
+                    } else {
+                        return Response.success(stringRequest, HttpHeaderParser.parseCacheHeaders(response));
+                    }
+
+
+
+
+
+
+                } catch (UnsupportedEncodingException e) {
+                    return Response.error(new ParseError(e));
+                } catch (Exception je) {
+                    return Response.error(new ParseError(je));
+                }
+            }
+        };
+
+        queue.add(request);
+        request.setShouldCache(false);
     }
 }

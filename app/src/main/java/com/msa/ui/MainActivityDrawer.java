@@ -25,10 +25,10 @@ import com.msa.ui.preferences.PreferencesManager;
 
 public class MainActivityDrawer extends AppCompatActivity {
 
-    private final int FRAGMENT_RSS_CARD_VIEW = 0;
-    private final int FRAGMENT_RSS_DETAIL    = 1;
-    private final int FRAGMENT_WEB_VIEW      = 2;
-    private final int FRAGMENT_SETTINGS      = 4;
+    //private final int FRAGMENT_RSS_CARD_VIEW = 0;
+    //private final int FRAGMENT_RSS_DETAIL    = 1;
+    //private final int FRAGMENT_WEB_VIEW      = 2;
+    //private final int FRAGMENT_SETTINGS      = 4;
 
     private final String FRAGMENT_TAG_CARD = "card";
     private final String FRAGMENT_TAG_DETAIL = "detail";
@@ -44,6 +44,10 @@ public class MainActivityDrawer extends AppCompatActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
     private PreferencesManager prefs;
+
+
+
+    private String rssURL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,34 +77,41 @@ public class MainActivityDrawer extends AppCompatActivity {
 
                 switch (menuItem.getItemId()){
 
-
-                    //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.le_monde:
                         Toast.makeText(getApplicationContext(),"le_monde Selected", Toast.LENGTH_SHORT).show();
+                        setRssURL(Constants.URL.RSS_LE_MONDE);
                         return true;
                     case R.id.nice_matin:
                         Toast.makeText(getApplicationContext(),"nice_matin Selected", Toast.LENGTH_SHORT).show();
+                        setRssURL(Constants.URL.RSS_NICE_MATIN);
                         return true;
                     case R.id.le_parisien:
                         Toast.makeText(getApplicationContext(),"le_parisien Selected", Toast.LENGTH_SHORT).show();
+                        setRssURL(Constants.URL.RSS_LE_PARISIEN);
                         return true;
                     case R.id.les_echos:
                         Toast.makeText(getApplicationContext(),"les_echos Selected", Toast.LENGTH_SHORT).show();
+                        setRssURL(Constants.URL.RSS_LES_ECHOS);
                         return true;
                     case R.id.lobs:
                         Toast.makeText(getApplicationContext(),"lobs Selected", Toast.LENGTH_SHORT).show();
+                        setRssURL(Constants.URL.RSS_LOBS);
                         return true;
                     case R.id.science_et_avenir:
                         Toast.makeText(getApplicationContext(),"science_et_avenir Selected", Toast.LENGTH_SHORT).show();
+                        setRssURL(Constants.URL.RSS_SCIENCE_AVENIR);
                         return true;
                     case R.id.fr_android:
                         Toast.makeText(getApplicationContext(),"fr_android Selected", Toast.LENGTH_SHORT).show();
+                        setRssURL(Constants.URL.RSS_ANDROID_MT);
                         return true;
                     case R.id.android_mt:
                         Toast.makeText(getApplicationContext(),"android_mt Selected", Toast.LENGTH_SHORT).show();
+                        setRssURL(Constants.URL.RSS_FR_ANDROID);
                         return true;
                     default:
                         Toast.makeText(getApplicationContext(),"Hum ! Selected", Toast.LENGTH_SHORT).show();
+                        setRssURL("");
                         return true;
 
                 }
@@ -137,7 +148,8 @@ public class MainActivityDrawer extends AppCompatActivity {
 
         initFragmentManager();
 
-        loadFragment(FRAGMENT_RSS_CARD_VIEW);
+        setRssURL(Constants.URL.RSS_LE_MONDE);
+        loadFragment(Constants.FRAGMENT.FRAGMENT_RSS_CARD_VIEW);
     }
 
     @Override
@@ -169,7 +181,7 @@ public class MainActivityDrawer extends AppCompatActivity {
             if (settingsFragment != null && settingsFragment.isVisible()) {
                 return true;
             } else {
-                loadFragment(FRAGMENT_SETTINGS);
+                loadFragment(Constants.FRAGMENT.FRAGMENT_SETTINGS);
                 return true;
             }
         }
@@ -212,20 +224,20 @@ public class MainActivityDrawer extends AppCompatActivity {
         String tagFragment = FRAGMENT_TAG_CARD;
 
         switch (fragmentIndex) {
-            case FRAGMENT_RSS_CARD_VIEW:
+            case Constants.FRAGMENT.FRAGMENT_RSS_CARD_VIEW:
                 fragment = new CardViewFragment();
                 break;
-            case FRAGMENT_RSS_DETAIL:
+            case Constants.FRAGMENT.FRAGMENT_RSS_DETAIL:
                 fragment = new DetailFragment();
                 tagFragment = FRAGMENT_TAG_DETAIL;
                 bBackStack = true;
                 break;
-            case FRAGMENT_WEB_VIEW:
+            case Constants.FRAGMENT.FRAGMENT_WEB_VIEW:
                 fragment = new WebViewFragment();
                 tagFragment = FRAGMENT_TAG_WEB;
                 bBackStack = true;
                 break;
-            case FRAGMENT_SETTINGS:
+            case Constants.FRAGMENT.FRAGMENT_SETTINGS:
                 fragment = new SettingsFragment();
                 tagFragment = FRAGMENT_TAG_SETTINGS;
                 bBackStack = true;
@@ -235,6 +247,11 @@ public class MainActivityDrawer extends AppCompatActivity {
         }
 
         if (fragment != null) {
+
+            Bundle bundle = new Bundle();
+            bundle.putString("rssURL", getRssURL() );
+            fragment.setArguments(bundle);
+
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -261,5 +278,14 @@ public class MainActivityDrawer extends AppCompatActivity {
 
     public PreferencesManager getPrefs() {
         return prefs;
+    }
+
+    public String getRssURL() {
+        return rssURL;
+    }
+
+    public void setRssURL(String rssURL) {
+        this.rssURL = rssURL;
+        loadFragment(Constants.FRAGMENT.FRAGMENT_RSS_CARD_VIEW);
     }
 }
