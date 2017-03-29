@@ -1,15 +1,15 @@
 <resources>
-    <string name="app_name">Le Monde.fr</string>
+    <string name="app_name">RSS Reader</string>
     <string name="connection_error">Erreur de connection.</string>
     <string name="xml_error">Erreur XML</string>
-    <string name="read_on_website">Lire la suite sur Le Monde.fr</string>
+    <string name="read_on_website">Lire la suite sur le site web</string>
     <string name="rss_date_time">Le %1$s à %2$s</string>
     <string name="toolbar_setting">Paramètres</string>
     <string name="settings_only_wifi">Charger le flux RSS quand le WIFI est activé</string>
     <string name="no_internet_connexion">Pas de connection internet</string>
     <string name="wait_loading">Chargement en cours.</string>
     <string name="page_not_found">Erreure de chargement</string>
-    <string name="page_not_found_desc">Le site Le Monde.fr est inaccessible</string>
+    <string name="page_not_found_desc">Le site demandé est inaccessible</string>
     <string name="read_news">Ecouter l\'article</string>
     <string name="openDrawer">Open Drawer</string>
     <string name="closeDrawer">Close drawer</string>
@@ -27,6 +27,8 @@
     <!-- navigation_view_header -->
     <string name="nvh_title">RSS</string>
     <string name="nvh_subtitle">Liste des flux</string>
+    <string name="nav_menu_config">Configuration</string>
+    <string name="nav_menu_wifi">Wifi</string>
 
 
 </resources>

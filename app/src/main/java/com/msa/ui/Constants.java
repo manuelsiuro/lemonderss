@@ -1,6 +1,7 @@
 package com.msa.ui;
 
 
+import android.content.res.Resources;
 
 public class Constants {
 
@@ -22,7 +23,6 @@ public class Constants {
         String RSS_URL = "rssURL";
     }
 
-
     public interface URL {
         String RSS_LE_MONDE         = "http://www.lemonde.fr/rss/une.xml";
         String RSS_NICE_MATIN       = "http://www.nicematin.com/ville/cote-d-azur/rss";
@@ -33,4 +33,5 @@ public class Constants {
         String RSS_FR_ANDROID       = "";
         String RSS_ANDROID_MT       = "http://feeds.feedburner.com/AndroidMtNews?format=xml";
     }
+
 }

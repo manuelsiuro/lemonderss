@@ -2,6 +2,7 @@ package com.msa.ui;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,10 +12,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.msa.ui.adapters.RssItem;
 import com.msa.ui.fragments.CardViewFragment;
@@ -25,28 +24,13 @@ import com.msa.ui.preferences.PreferencesManager;
 
 public class MainActivityDrawer extends AppCompatActivity {
 
-    //private final int RSS_CARD = 0;
-    //private final int RSS_DETAIL    = 1;
-    //private final int WEB_VIEW      = 2;
-    //private final int SETTINGS      = 4;
-
-    //private final String CARD = "card";
-    //private final String DETAIL = "detail";
-    //private final String WEB = "web";
-    //private final String SETTINGS = "settings";
-
     private RssItem rssItem;
-
     private Toolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
-
     private ActionBarDrawerToggle actionBarDrawerToggle;
-
+    private CollapsingToolbarLayout collapsingToolbar;
     private PreferencesManager prefs;
-
-
-
     private String rssURL;
 
     @Override
@@ -55,58 +39,15 @@ public class MainActivityDrawer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer);
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        drawerLayout    = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toolbar         = (Toolbar) findViewById(R.id.toolbar);
+        navigationView  = (NavigationView) findViewById(R.id.nav_view);
+        collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+
         setSupportActionBar(toolbar);
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        initNavigationView();
 
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-
-            // This method will trigger on item Click of navigation menu
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-
-                if(menuItem.isChecked()){
-                    menuItem.setChecked(false);
-                } else {
-                    menuItem.setChecked(true);
-                }
-
-                drawerLayout.closeDrawers();
-
-                switch (menuItem.getItemId()){
-
-                    case R.id.le_monde:
-                        setRssURL(Constants.URL.RSS_LE_MONDE);
-                        return true;
-                    case R.id.nice_matin:
-                        setRssURL(Constants.URL.RSS_NICE_MATIN);
-                        return true;
-                    case R.id.le_parisien:
-                        setRssURL(Constants.URL.RSS_LE_PARISIEN);
-                        return true;
-                    case R.id.les_echos:
-                        setRssURL(Constants.URL.RSS_LES_ECHOS);
-                        return true;
-                    case R.id.lobs:
-                        setRssURL(Constants.URL.RSS_LOBS);
-                        return true;
-                    case R.id.science_et_avenir:
-                        setRssURL(Constants.URL.RSS_SCIENCE_AVENIR);
-                        return true;
-                    case R.id.fr_android:
-                        setRssURL(Constants.URL.RSS_ANDROID_MT);
-                        return true;
-                    case R.id.android_mt:
-                        setRssURL(Constants.URL.RSS_FR_ANDROID);
-                        return true;
-                    default:
-                        setRssURL("");
-                        return true;
-                }
-            }
-        });
 
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer,  R.string.closeDrawer){
 
@@ -128,12 +69,14 @@ public class MainActivityDrawer extends AppCompatActivity {
         }
 
         actionBarDrawerToggle.syncState();
-
         prefs               = new PreferencesManager(this);
-
         initFragmentManager();
+    }
 
-        setRssURL(Constants.URL.RSS_LE_MONDE);
+    @Override
+    public void onStart() {
+        super.onStart();
+        setRssURL(Constants.URL.RSS_LE_MONDE, getString(R.string.nav_menu_lemonde));
         loadFragment(Constants.FRAGMENT.RSS_CARD);
     }
 
@@ -149,29 +92,61 @@ public class MainActivityDrawer extends AppCompatActivity {
         actionBarDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+    private void initNavigationView(){
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
-        int id = item.getItemId();
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
 
-        SettingsFragment settingsFragment = (SettingsFragment)getSupportFragmentManager().findFragmentByTag(Constants.TAG.SETTINGS);
+                if(menuItem.isChecked()){
+                    menuItem.setChecked(false);
+                } else {
+                    menuItem.setChecked(true);
+                }
 
-        if (id == R.id.settings) {
-            if (settingsFragment != null && settingsFragment.isVisible()) {
-                return true;
-            } else {
-                loadFragment(Constants.FRAGMENT.SETTINGS);
-                return true;
+                drawerLayout.closeDrawers();
+
+                switch (menuItem.getItemId()){
+
+                    case R.id.le_monde:
+                        setRssURL(Constants.URL.RSS_LE_MONDE, menuItem.getTitle().toString());
+                        return true;
+                    case R.id.nice_matin:
+                        setRssURL(Constants.URL.RSS_NICE_MATIN, menuItem.getTitle().toString());
+                        return true;
+                    case R.id.le_parisien:
+                        setRssURL(Constants.URL.RSS_LE_PARISIEN, menuItem.getTitle().toString());
+                        return true;
+                    case R.id.les_echos:
+                        setRssURL(Constants.URL.RSS_LES_ECHOS, menuItem.getTitle().toString());
+                        return true;
+                    case R.id.lobs:
+                        setRssURL(Constants.URL.RSS_LOBS, menuItem.getTitle().toString());
+                        return true;
+                    case R.id.science_et_avenir:
+                        setRssURL(Constants.URL.RSS_SCIENCE_AVENIR, menuItem.getTitle().toString());
+                        return true;
+                    case R.id.fr_android:
+                        setRssURL(Constants.URL.RSS_ANDROID_MT, menuItem.getTitle().toString());
+                        return true;
+                    case R.id.android_mt:
+                        setRssURL(Constants.URL.RSS_FR_ANDROID, menuItem.getTitle().toString());
+                        return true;
+                    case R.id.settings:
+                        SettingsFragment settingsFragment = (SettingsFragment)getSupportFragmentManager().findFragmentByTag(Constants.TAG.SETTINGS);
+                        if (settingsFragment != null && settingsFragment.isVisible()) {
+                            return true;
+                        } else {
+                            loadFragment(Constants.FRAGMENT.SETTINGS);
+                            return true;
+                        }
+                    default:
+
+                        return true;
+                }
             }
-        }
-
-        return super.onOptionsItemSelected(item);
+        });
     }
 
     private void initFragmentManager(){
@@ -269,8 +244,13 @@ public class MainActivityDrawer extends AppCompatActivity {
         return rssURL;
     }
 
-    public void setRssURL(String rssURL) {
+    public void setRssURL(String rssURL, String title) {
+        // toolbar_layout
         this.rssURL = rssURL;
         loadFragment(Constants.FRAGMENT.RSS_CARD);
+
+        //final CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        collapsingToolbar.setTitle(title);
+
     }
 }

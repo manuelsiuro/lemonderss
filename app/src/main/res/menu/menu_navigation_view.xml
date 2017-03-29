@@ -50,4 +50,14 @@
             android:title="@string/nav_menu_androidmt" />
 
     </group>
+
+    <item android:title="@string/nav_menu_config">
+        <menu>
+            <item
+                android:id="@+id/settings"
+                android:icon="@drawable/ic_dots"
+                android:title="@string/nav_menu_wifi" />
+
+        </menu>
+    </item>
 </menu>

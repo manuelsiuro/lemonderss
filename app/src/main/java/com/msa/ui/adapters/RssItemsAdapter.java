@@ -52,7 +52,12 @@ public class RssItemsAdapter extends RecyclerView.Adapter<RssItemsAdapter.MyView
     public void onBindViewHolder(final MyViewHolder holder, int position) {
 
         final RssItem rssItem = rssItemList.get(position);
-        Glide.with(mContext).load(rssItem.getEnclosure()).into(holder.thumbnail);
+        if(rssItem.getEnclosure()!=null){
+            Glide.with(mContext).load(rssItem.getEnclosure()).into(holder.thumbnail);
+        } else {
+            holder.thumbnail.setVisibility(View.GONE);
+        }
+
         holder.title.setText(rssItem.getTitle());
         holder.datetime.setText(mContext.getString(R.string.rss_date_time, rssItem.getStrDate(), rssItem.getStrTime()));
 

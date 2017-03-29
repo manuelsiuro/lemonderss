@@ -44,7 +44,12 @@ public class DetailFragment extends Fragment {
         TextView txt_open_link      = (TextView) rootView.findViewById(R.id.txt_open_link);
         TextView txt_tts_link       = (TextView) rootView.findViewById(R.id.txt_tts_link);
 
-        Glide.with(getActivity()).load(rssItem.getEnclosure()).into(thumbnail);
+        if(rssItem.getEnclosure()!=null){
+            Glide.with(getActivity()).load(rssItem.getEnclosure()).into(thumbnail);
+        } else {
+            thumbnail.setVisibility(View.GONE);
+        }
+
 
         title.setText(rssItem.getTitle());
         datetime.setText(getString(R.string.rss_date_time, rssItem.getStrDate(), rssItem.getStrTime()));
