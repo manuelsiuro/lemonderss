@@ -1,13 +1,12 @@
 package com.msa.ui.interfaces;
 
-
 import com.msa.ui.adapters.RssItem;
 import com.msa.ui.preferences.PreferencesManager;
 
 public interface FragmentCallBack {
 
-    public RssItem getRssItem();
-    public void setRssItem(RssItem rssItem);
-    public void loadFragment(int fragmentIndex);
-    public PreferencesManager getPrefs();
+    RssItem getRssItem();
+    void setRssItem(RssItem rssItem);
+    void loadFragment(int fragmentIndex);
+    PreferencesManager getPrefs();
 }

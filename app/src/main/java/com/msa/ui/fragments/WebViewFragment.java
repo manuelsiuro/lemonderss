@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +18,13 @@ import com.msa.ui.interfaces.FragmentCallBack;
 
 public class WebViewFragment extends Fragment {
 
+    private static final String TAG = "==> WebViewFragment : ";
+
     private static final String WEB_URL     = "www.lemonde.fr";
     private static final String MOBILE_URL  = "mobile.lemonde.fr";
     private WebView mWebView;
     private ProgressDialog progressBar;
-
+    private RssItem rssItem;
     private FragmentCallBack callback;
 
     public WebViewFragment() {}
@@ -29,11 +32,12 @@ public class WebViewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "onCreate");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        Log.i(TAG, "onCreateView");
         callback = (FragmentCallBack)getActivity();
 
         final View rootView     = inflater.inflate(R.layout.fragment_webview, container, false);
@@ -45,8 +49,7 @@ public class WebViewFragment extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
-
-        final RssItem rssItem   = callback.getRssItem();
+        Log.i(TAG, "onStart");
 
         progressBar = new ProgressDialog(getActivity());
         progressBar.setMessage(getString(R.string.wait_loading));
@@ -88,6 +91,24 @@ public class WebViewFragment extends Fragment {
         mWebView.setScrollbarFadingEnabled(true);
         mWebView.getSettings().setLoadsImagesAutomatically(true);
         mWebView.loadUrl(mobileURL);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mWebView.saveState(outState);
+        outState.putSerializable("rssItem", rssItem);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mWebView.restoreState(savedInstanceState);
+        if ((savedInstanceState != null) && (savedInstanceState.getSerializable("rssItem") != null)) {
+            rssItem = (RssItem) savedInstanceState.getSerializable("rssItem");
+        } else {
+            rssItem = callback.getRssItem();
+        }
     }
 
     @Override

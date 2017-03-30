@@ -1,6 +1,8 @@
 package com.msa.ui.adapters;
 
-public class RssItem {
+import java.io.Serializable;
+
+public class RssItem implements Serializable {
 
     private String title;
     private String enclosure;

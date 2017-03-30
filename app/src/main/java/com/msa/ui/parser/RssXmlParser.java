@@ -20,7 +20,6 @@ public class RssXmlParser {
     private static final String TAG_DESCRIPTION = "description";
     private static final String TAG_PUB_DATE    = "pubDate";
     private static final String TAG_ENCLOSURE   = "enclosure";
-    private static final String TAG_GUID        = "guid";
     private static final String ATTRIBUTE_URL   = "url";
 
     public List<Item> parse(String response) throws XmlPullParserException, IOException {

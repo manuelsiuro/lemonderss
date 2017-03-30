@@ -11,7 +11,7 @@
         android:clickable="true"
         android:scaleType="fitXY"
         android:contentDescription="@string/app_name"
-        android:layout_height="240dp" />
+        android:layout_height="160dp" />
 
     <TextView
         android:id="@+id/title"

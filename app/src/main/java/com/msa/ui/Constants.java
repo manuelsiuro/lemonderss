@@ -1,8 +1,5 @@
 package com.msa.ui;
 
-
-import android.content.res.Resources;
-
 public class Constants {
 
     public interface FRAGMENT {

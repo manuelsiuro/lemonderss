@@ -1,7 +1,7 @@
 package com.msa.ui.fragments;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -85,8 +85,15 @@ public class CardViewFragment extends Fragment {
         super.onStart();
         rssItemList  = new ArrayList<>();
         adapter      = new RssItemsAdapter(getActivity(), rssItemList);
+        RecyclerView.LayoutManager mLayoutManager;
 
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
+        if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+            mLayoutManager = new GridLayoutManager(getActivity(), 1);
+        } else {
+            mLayoutManager = new GridLayoutManager(getActivity(), 2);
+        }
+
+        //RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);

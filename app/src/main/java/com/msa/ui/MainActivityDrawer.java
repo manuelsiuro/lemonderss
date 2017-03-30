@@ -1,5 +1,6 @@
 package com.msa.ui;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -12,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -25,6 +27,8 @@ import com.msa.ui.preferences.PreferencesManager;
 
 public class MainActivityDrawer extends AppCompatActivity implements FragmentCallBack {
 
+    private String TAG = "MainActivityDrawer";
+
     private RssItem rssItem;
     private Toolbar toolbar;
     private NavigationView navigationView;
@@ -33,6 +37,7 @@ public class MainActivityDrawer extends AppCompatActivity implements FragmentCal
     private CollapsingToolbarLayout collapsingToolbar;
     private PreferencesManager prefs;
     private String rssURL;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,24 +77,84 @@ public class MainActivityDrawer extends AppCompatActivity implements FragmentCal
         actionBarDrawerToggle.syncState();
         prefs               = new PreferencesManager(this);
         initFragmentManager();
+
+        if(savedInstanceState==null){
+            setRssURL(Constants.URL.RSS_LE_MONDE, getString(R.string.nav_menu_lemonde));
+        }
+    }
+
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        Log.i(TAG, "onRestart");
+    }
+
+    @Override
+    protected void onNewIntent (Intent intent) {
+        super.onNewIntent(intent);
+        Log.i(TAG, "onNewIntent");
+        setIntent(intent);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        setRssURL(Constants.URL.RSS_LE_MONDE, getString(R.string.nav_menu_lemonde));
-        loadFragment(Constants.FRAGMENT.RSS_CARD);
+        Log.i(TAG, "onStart");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i(TAG, "onPause");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.i(TAG, "onStop");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "onDestroy");
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.i(TAG, "onSaveInstanceState");
+        if (outState != null) {
+            outState.putSerializable("rssItem", rssItem);
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.i(TAG, "onRestoreInstanceState");
+        if ((savedInstanceState != null) && (savedInstanceState.getSerializable("rssItem") != null)) {
+            rssItem = (RssItem) savedInstanceState.getSerializable("rssItem");
+        }
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        Log.i(TAG, "onPostCreate");
         actionBarDrawerToggle.syncState();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        Log.i(TAG, "onConfigurationChanged");
         actionBarDrawerToggle.onConfigurationChanged(newConfig);
     }
 
