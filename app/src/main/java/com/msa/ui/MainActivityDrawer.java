@@ -1,5 +1,6 @@
 package com.msa.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -45,15 +47,14 @@ public class MainActivityDrawer extends AppCompatActivity implements FragmentCal
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer);
 
-        drawerLayout    = (DrawerLayout) findViewById(R.id.drawer_layout);
-        toolbar         = (Toolbar) findViewById(R.id.toolbar);
-        navigationView  = (NavigationView) findViewById(R.id.nav_view);
+        drawerLayout      = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toolbar           = (Toolbar) findViewById(R.id.toolbar);
+        navigationView    = (NavigationView) findViewById(R.id.nav_view);
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
 
         setSupportActionBar(toolbar);
 
         initNavigationView();
-
 
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer,  R.string.closeDrawer){
 
@@ -208,9 +209,10 @@ public class MainActivityDrawer extends AppCompatActivity implements FragmentCal
                             return true;
                         }
                     default:
-
                         return true;
                 }
+
+
             }
         });
     }
@@ -241,6 +243,22 @@ public class MainActivityDrawer extends AppCompatActivity implements FragmentCal
                 }
             }
         });
+    }
+
+    private void showQuit(){
+        new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle(R.string.quit)
+                .setMessage(R.string.really_quit)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+
+                })
+                .setNegativeButton(R.string.no, null)
+                .show();
     }
 
     public String getRssURL() {

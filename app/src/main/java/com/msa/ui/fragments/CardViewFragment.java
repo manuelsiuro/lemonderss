@@ -50,6 +50,7 @@ public class CardViewFragment extends Fragment {
     private List<RssItem> rssItemList;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ProgressDialog progressBar;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     public CardViewFragment() {
     }
@@ -62,8 +63,6 @@ public class CardViewFragment extends Fragment {
         this.rssURL = rssURL;
     }
 
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +73,7 @@ public class CardViewFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_cardview, container, false);
 
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        recyclerView        = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         swipeRefreshLayout  = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeContainer);
 
         return rootView;
@@ -85,16 +84,9 @@ public class CardViewFragment extends Fragment {
         super.onStart();
         rssItemList  = new ArrayList<>();
         adapter      = new RssItemsAdapter(getActivity(), rssItemList);
-        RecyclerView.LayoutManager mLayoutManager;
 
-        if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-            mLayoutManager = new GridLayoutManager(getActivity(), 1);
-        } else {
-            mLayoutManager = new GridLayoutManager(getActivity(), 2);
-        }
+        setGridLayout();
 
-        //RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
-        recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
@@ -109,12 +101,34 @@ public class CardViewFragment extends Fragment {
         httpRequest(rssURL);
 
         initSwipeRefreshLayout();
+    }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        setGridLayout();
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    private void setGridLayout(){
+
+        if ((getResources().getConfiguration().screenLayout &
+                Configuration.SCREENLAYOUT_SIZE_MASK) ==
+                Configuration.SCREENLAYOUT_SIZE_LARGE) {
+            mLayoutManager = new GridLayoutManager(getActivity(), 2);
+        } else {
+            if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                mLayoutManager = new GridLayoutManager(getActivity(), 2);
+            } else {
+                mLayoutManager = new GridLayoutManager(getActivity(), 1);
+            }
+        }
+
+        recyclerView.setLayoutManager(mLayoutManager);
     }
 
     private void initSwipeRefreshLayout(){
@@ -225,18 +239,16 @@ public class CardViewFragment extends Fragment {
             @Override
             protected Response<String> parseNetworkResponse(NetworkResponse response) {
 
-                System.out.println(response.headers);
+                //System.out.println(response.headers);
 
                 try {
-                    System.out.println(response.headers.toString().toLowerCase().indexOf("utf-8"));
+                    //System.out.println(response.headers.toString().toLowerCase().indexOf("utf-8"));
                     //System.out.println(new String( response.data));
-                    System.out.println(response.statusCode);
-
+                    //System.out.println(response.statusCode);
 
                     String stringRequest = new String( response.data, HttpHeaderParser.parseCharset(response.headers));
 
                     if(response.headers.toString().toLowerCase().indexOf("utf-8") <= 0){
-
                         return Response.success(new String(response.data, "UTF-8"), HttpHeaderParser.parseCacheHeaders(response));
                     } else {
                         return Response.success(stringRequest, HttpHeaderParser.parseCacheHeaders(response));
