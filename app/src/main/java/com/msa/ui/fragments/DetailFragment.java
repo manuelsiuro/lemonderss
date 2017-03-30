@@ -1,5 +1,7 @@
 package com.msa.ui.fragments;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
@@ -16,9 +18,10 @@ import com.msa.ui.R;
 import com.msa.ui.adapters.RssItem;
 import com.msa.ui.interfaces.FragmentCallBack;
 
+import java.util.HashMap;
 import java.util.Locale;
 
-public class DetailFragment extends Fragment implements TextToSpeech.OnInitListener {
+public class DetailFragment extends Fragment {
 
     private static final String TAG = "==> DetailFragment : ";
     private TextToSpeech tts;
@@ -31,8 +34,6 @@ public class DetailFragment extends Fragment implements TextToSpeech.OnInitListe
     private TextView txt_tts_link;
 
     private RssItem rssItem;
-
-    private Boolean bTts = false;
 
     public DetailFragment() {}
 
@@ -75,6 +76,15 @@ public class DetailFragment extends Fragment implements TextToSpeech.OnInitListe
         datetime.setText(getString(R.string.rss_date_time, rssItem.getStrDate(), rssItem.getStrTime()));
         description.setText(rssItem.getDescription());
 
+        tts = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != TextToSpeech.ERROR) {
+                    tts.setLanguage(Locale.FRENCH);
+                }
+            }
+        });
+
         txt_open_link.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,9 +103,28 @@ public class DetailFragment extends Fragment implements TextToSpeech.OnInitListe
     }
 
     private void speak(String message){
-        if(bTts){
-            tts.speak(message, TextToSpeech.QUEUE_FLUSH, null);
+        Log.i(TAG, "TTS speak " + message);
+        //tts.speak(message, TextToSpeech.QUEUE_FLUSH, null);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ttsGreater21(message);
+        } else {
+            ttsUnder20(message);
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    private void ttsUnder20(String text) {
+        Log.i(TAG, "TTS speak ttsUnder20");
+        HashMap<String, String> map = new HashMap<>();
+        map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "MessageId");
+        tts.speak(text, TextToSpeech.QUEUE_FLUSH, map);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void ttsGreater21(String text) {
+        Log.i(TAG, "TTS speak ttsUnder20");
+        String utteranceId = this.hashCode() + "";
+        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
     }
 
     @Override
@@ -126,13 +155,5 @@ public class DetailFragment extends Fragment implements TextToSpeech.OnInitListe
         }
     }
 
-    @Override
-    public void onInit(int status) {
-        if (status == TextToSpeech.SUCCESS) {
-            int result = tts.setLanguage(Locale.FRENCH);
-            if(result != TextToSpeech.LANG_NOT_SUPPORTED){
-                bTts = true;
-            }
-        }
-    }
+
 }
