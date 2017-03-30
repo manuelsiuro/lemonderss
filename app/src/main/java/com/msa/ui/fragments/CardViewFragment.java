@@ -1,5 +1,7 @@
 package com.msa.ui.fragments;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -47,6 +49,7 @@ public class CardViewFragment extends Fragment {
     private RssItemsAdapter adapter;
     private List<RssItem> rssItemList;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private ProgressDialog progressBar;
 
     public CardViewFragment() {
     }
@@ -59,6 +62,8 @@ public class CardViewFragment extends Fragment {
         this.rssURL = rssURL;
     }
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,15 +74,28 @@ public class CardViewFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_cardview, container, false);
 
-        rssItemList  = new ArrayList<>();
-        adapter      = new RssItemsAdapter(getActivity(), rssItemList);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         swipeRefreshLayout  = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeContainer);
+
+        return rootView;
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        rssItemList  = new ArrayList<>();
+        adapter      = new RssItemsAdapter(getActivity(), rssItemList);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+
+        progressBar = new ProgressDialog(getActivity());
+        progressBar.setMessage(getString(R.string.wait_loading));
+        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressBar.setProgress(0);
+        progressBar.setMax(100);
 
         String rssURL = this.getArguments().getString(Constants.BUNDLE.RSS_URL);
         setRssURL(rssURL);
@@ -85,7 +103,6 @@ public class CardViewFragment extends Fragment {
 
         initSwipeRefreshLayout();
 
-        return rootView;
     }
 
     @Override
@@ -109,9 +126,12 @@ public class CardViewFragment extends Fragment {
 
     public void stopLoaderRefreshLayout(){
         swipeRefreshLayout.setRefreshing(false);
+        progressBar.dismiss();
     }
 
     public void httpRequest(String urlString) {
+
+        progressBar.show();
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
 

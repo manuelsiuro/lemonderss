@@ -11,9 +11,9 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.msa.ui.MainActivityDrawer;
 import com.msa.ui.R;
 import com.msa.ui.adapters.RssItem;
+import com.msa.ui.interfaces.FragmentCallBack;
 
 public class WebViewFragment extends Fragment {
 
@@ -21,6 +21,8 @@ public class WebViewFragment extends Fragment {
     private static final String MOBILE_URL  = "mobile.lemonde.fr";
     private WebView mWebView;
     private ProgressDialog progressBar;
+
+    private FragmentCallBack callback;
 
     public WebViewFragment() {}
 
@@ -32,9 +34,19 @@ public class WebViewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        callback = (FragmentCallBack)getActivity();
+
         final View rootView     = inflater.inflate(R.layout.fragment_webview, container, false);
-        final RssItem rssItem   = ((MainActivityDrawer)getActivity()).getRssItem();
         mWebView                = (WebView) rootView.findViewById(R.id.webview);
+
+        return rootView;
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        final RssItem rssItem   = callback.getRssItem();
 
         progressBar = new ProgressDialog(getActivity());
         progressBar.setMessage(getString(R.string.wait_loading));
@@ -76,8 +88,6 @@ public class WebViewFragment extends Fragment {
         mWebView.setScrollbarFadingEnabled(true);
         mWebView.getSettings().setLoadsImagesAutomatically(true);
         mWebView.loadUrl(mobileURL);
-
-        return rootView;
     }
 
     @Override

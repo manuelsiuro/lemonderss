@@ -12,9 +12,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.msa.ui.Constants;
-import com.msa.ui.MainActivityDrawer;
 import com.msa.ui.R;
 import com.msa.ui.adapters.RssItem;
+import com.msa.ui.interfaces.FragmentCallBack;
 
 import java.util.Locale;
 
@@ -22,6 +22,13 @@ public class DetailFragment extends Fragment {
 
     private Context mContext;
     private TextToSpeech tts;
+    private FragmentCallBack callback;
+    private ImageView thumbnail;
+    private TextView title;
+    private TextView datetime;
+    private TextView description;
+    private TextView txt_open_link;
+    private TextView txt_tts_link;
 
     public DetailFragment() {}
 
@@ -35,21 +42,29 @@ public class DetailFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         mContext = getActivity();
+        callback = (FragmentCallBack)getActivity();
 
-        final RssItem rssItem       = ((MainActivityDrawer)getActivity()).getRssItem();
-        ImageView thumbnail         = (ImageView) rootView.findViewById(R.id.thumbnail);
-        final TextView title        = (TextView) rootView.findViewById(R.id.title);
-        TextView datetime           = (TextView) rootView.findViewById(R.id.datetime);
-        final TextView description  = (TextView) rootView.findViewById(R.id.description);
-        TextView txt_open_link      = (TextView) rootView.findViewById(R.id.txt_open_link);
-        TextView txt_tts_link       = (TextView) rootView.findViewById(R.id.txt_tts_link);
+        thumbnail           = (ImageView) rootView.findViewById(R.id.thumbnail);
+        title               = (TextView) rootView.findViewById(R.id.title);
+        datetime            = (TextView) rootView.findViewById(R.id.datetime);
+        description         = (TextView) rootView.findViewById(R.id.description);
+        txt_open_link       = (TextView) rootView.findViewById(R.id.txt_open_link);
+        txt_tts_link        = (TextView) rootView.findViewById(R.id.txt_tts_link);
+
+        return rootView;
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        final RssItem rssItem       = callback.getRssItem();
 
         if(rssItem.getEnclosure()!=null){
             Glide.with(getActivity()).load(rssItem.getEnclosure()).into(thumbnail);
         } else {
             thumbnail.setVisibility(View.GONE);
         }
-
 
         title.setText(rssItem.getTitle());
         datetime.setText(getString(R.string.rss_date_time, rssItem.getStrDate(), rssItem.getStrTime()));
@@ -58,8 +73,8 @@ public class DetailFragment extends Fragment {
         txt_open_link.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivityDrawer)mContext).setRssItem(rssItem);
-                ((MainActivityDrawer)mContext).loadFragment(Constants.FRAGMENT.WEB_VIEW);
+                callback.setRssItem(rssItem);
+                callback.loadFragment(Constants.FRAGMENT.WEB_VIEW);
             }
         });
 
@@ -79,8 +94,6 @@ public class DetailFragment extends Fragment {
                 tts.speak(message, TextToSpeech.QUEUE_FLUSH, null);
             }
         });
-
-        return rootView;
     }
 
     @Override

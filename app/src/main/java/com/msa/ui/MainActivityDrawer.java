@@ -20,9 +20,10 @@ import com.msa.ui.fragments.CardViewFragment;
 import com.msa.ui.fragments.DetailFragment;
 import com.msa.ui.fragments.SettingsFragment;
 import com.msa.ui.fragments.WebViewFragment;
+import com.msa.ui.interfaces.FragmentCallBack;
 import com.msa.ui.preferences.PreferencesManager;
 
-public class MainActivityDrawer extends AppCompatActivity {
+public class MainActivityDrawer extends AppCompatActivity implements FragmentCallBack {
 
     private RssItem rssItem;
     private Toolbar toolbar;
@@ -177,6 +178,33 @@ public class MainActivityDrawer extends AppCompatActivity {
         });
     }
 
+    public String getRssURL() {
+        return rssURL;
+    }
+
+    public void setRssURL(String rssURL){
+        this.rssURL = rssURL;
+    }
+
+    public void setRssURL(String rssURL, String title) {
+        setRssURL(rssURL);
+        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        loadFragment(Constants.FRAGMENT.RSS_CARD);
+        collapsingToolbar.setTitle(title);
+    }
+
+    /** interfaces */
+    @Override
+    public RssItem getRssItem() {
+        return rssItem;
+    }
+
+    @Override
+    public void setRssItem(RssItem rssItem) {
+        this.rssItem = rssItem;
+    }
+
+    @Override
     public void loadFragment(int fragmentIndex) {
 
         Fragment fragment = null;
@@ -228,29 +256,8 @@ public class MainActivityDrawer extends AppCompatActivity {
         }
     }
 
-    public RssItem getRssItem() {
-        return rssItem;
-    }
-
-    public void setRssItem(RssItem rssItem) {
-        this.rssItem = rssItem;
-    }
-
+    @Override
     public PreferencesManager getPrefs() {
         return prefs;
-    }
-
-    public String getRssURL() {
-        return rssURL;
-    }
-
-    public void setRssURL(String rssURL, String title) {
-        // toolbar_layout
-        this.rssURL = rssURL;
-        loadFragment(Constants.FRAGMENT.RSS_CARD);
-
-        //final CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        collapsingToolbar.setTitle(title);
-
     }
 }
