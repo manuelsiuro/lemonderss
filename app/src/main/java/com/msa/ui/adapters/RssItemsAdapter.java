@@ -53,6 +53,7 @@ public class RssItemsAdapter extends RecyclerView.Adapter<RssItemsAdapter.MyView
 
         final RssItem rssItem = rssItemList.get(position);
         if(rssItem.getEnclosure()!=null){
+            holder.thumbnail.setVisibility(View.VISIBLE);
             Glide.with(mContext).load(rssItem.getEnclosure()).into(holder.thumbnail);
         } else {
             holder.thumbnail.setVisibility(View.GONE);

@@ -25,7 +25,11 @@ import com.msa.ui.fragments.DetailFragment;
 import com.msa.ui.fragments.SettingsFragment;
 import com.msa.ui.fragments.WebViewFragment;
 import com.msa.ui.interfaces.FragmentCallBack;
+import com.msa.ui.parser.JsonSourcesParser;
 import com.msa.ui.preferences.PreferencesManager;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivityDrawer extends AppCompatActivity implements FragmentCallBack {
 
@@ -82,6 +86,19 @@ public class MainActivityDrawer extends AppCompatActivity implements FragmentCal
         if(savedInstanceState==null){
             setRssURL(Constants.URL.RSS_LE_MONDE, getString(R.string.nav_menu_lemonde));
         }
+
+        JsonSourcesParser jsonSourcesParser = new JsonSourcesParser(this);
+        jsonSourcesParser.parseJson();
+
+        ArrayList<HashMap<String, String>> itemList = jsonSourcesParser.getItemList();
+
+        for (HashMap<String, String> feed : itemList) {
+            System.out.println(" ");
+            System.out.println(feed.get("label"));
+            System.out.println(feed.get("url"));
+            System.out.println(feed.get("category"));
+        }
+
     }
 
     @Override

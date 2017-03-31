@@ -1,0 +1,44 @@
+{
+  "items": [
+    {
+      "label": "Le Monde.fr",
+      "url": "http://www.lemonde.fr/rss/une.xml",
+      "category": "news"
+    },
+    {
+      "label": "Nice Matin",
+      "url": "http://www.nicematin.com/ville/cote-d-azur/rss",
+      "category": "news"
+    },
+    {
+      "label": "Le Parisien",
+      "url": "http://www.leparisien.fr/une/rss.xml",
+      "category": "news"
+    },
+    {
+      "label": "Les Echos",
+      "url": "https://www.lesechos.fr/rss/rss_articles_journal.xml",
+      "category": "news"
+    },
+    {
+      "label": "L'Obs",
+      "url": "http://tempsreel.nouvelobs.com/rss.xml",
+      "category": "news"
+    },
+    {
+      "label": "Science et Avenir",
+      "url": "https://www.sciencesetavenir.fr/rss.xml",
+      "category": "technology"
+    },
+    {
+      "label": "Fr Android",
+      "url": "",
+      "category": "android"
+    },
+    {
+      "label": "Android MT",
+      "url": "http://feeds.feedburner.com/AndroidMtNews?format=xml",
+      "category": "android"
+    }
+  ]
+}

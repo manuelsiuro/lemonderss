@@ -67,6 +67,7 @@ public class DetailFragment extends Fragment {
         Log.i(TAG, "onStart");
 
         if(rssItem.getEnclosure()!=null){
+            thumbnail.setVisibility(View.VISIBLE);
             Glide.with(getActivity()).load(rssItem.getEnclosure()).into(thumbnail);
         } else {
             thumbnail.setVisibility(View.GONE);
