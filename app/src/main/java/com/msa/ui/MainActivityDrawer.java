@@ -16,6 +16,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -43,6 +44,7 @@ public class MainActivityDrawer extends AppCompatActivity implements FragmentCal
     private CollapsingToolbarLayout collapsingToolbar;
     private PreferencesManager prefs;
     private String rssURL;
+    private ArrayList<HashMap<String, String>> itemList;
 
 
     @Override
@@ -83,21 +85,45 @@ public class MainActivityDrawer extends AppCompatActivity implements FragmentCal
         prefs               = new PreferencesManager(this);
         initFragmentManager();
 
-        if(savedInstanceState==null){
+        /*
+        if(savedInstanceState == null){
             setRssURL(Constants.URL.RSS_LE_MONDE, getString(R.string.nav_menu_lemonde));
-        }
+            navigationView.getMenu().getItem(0).setChecked(true);
+        }*/
 
         JsonSourcesParser jsonSourcesParser = new JsonSourcesParser(this);
         jsonSourcesParser.parseJson();
 
-        ArrayList<HashMap<String, String>> itemList = jsonSourcesParser.getItemList();
+        itemList = jsonSourcesParser.getItemList();
+
+        Menu menu = navigationView.getMenu();
+        menu.clear();
 
         for (HashMap<String, String> feed : itemList) {
+
+            int menuItemId = Integer.parseInt( feed.get("id") );
+
+            menu.add(0, menuItemId, 0, feed.get("label"));
+            menu.findItem( menuItemId ).setIcon( R.drawable.ic_rss );
+            menu.findItem( menuItemId ).setChecked(false);
+
+
+            if(menuItemId == 0){
+                if(savedInstanceState == null){
+                    setRssURL(feed.get("url"), feed.get("label"));
+                    navigationView.getMenu().getItem(menuItemId).setChecked(true);
+                }
+            }
+
+            /*
             System.out.println(" ");
             System.out.println(feed.get("label"));
             System.out.println(feed.get("url"));
             System.out.println(feed.get("category"));
+            */
         }
+
+        //showQuit();
 
     }
 
@@ -176,6 +202,13 @@ public class MainActivityDrawer extends AppCompatActivity implements FragmentCal
         actionBarDrawerToggle.onConfigurationChanged(newConfig);
     }
 
+    private void uncheckAllItem(){
+        int size = navigationView.getMenu().size();
+        for (int i = 0; i < size; i++) {
+            navigationView.getMenu().getItem(i).setChecked(false);
+        }
+    }
+
     private void initNavigationView(){
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -183,14 +216,32 @@ public class MainActivityDrawer extends AppCompatActivity implements FragmentCal
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
 
+                /*
                 if(menuItem.isChecked()){
                     menuItem.setChecked(false);
                 } else {
                     menuItem.setChecked(true);
                 }
+                */
+                uncheckAllItem();
 
                 drawerLayout.closeDrawers();
 
+                System.out.println("===> getItemId " + menuItem.getItemId());
+
+                for (HashMap<String, String> feed : itemList) {
+
+                    int menuItemId = Integer.parseInt( feed.get("id") );
+
+                    if(menuItemId == menuItem.getItemId()){
+                        menuItem.setChecked(true);
+                        setRssURL(feed.get("url"), feed.get("label"));
+                        return true;
+                    }
+                }
+
+
+                /*
                 switch (menuItem.getItemId()){
 
                     case R.id.le_monde:
@@ -227,9 +278,9 @@ public class MainActivityDrawer extends AppCompatActivity implements FragmentCal
                         }
                     default:
                         return true;
-                }
+                }*/
 
-
+                return true;
             }
         });
     }

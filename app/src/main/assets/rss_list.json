@@ -26,9 +26,39 @@
       "category": "news"
     },
     {
+      "label": "20 Minutes",
+      "url": "http://flux.20minutes.fr/feeds/rss-monde.xml",
+      "category": "news"
+    },
+    {
+      "label": "BBC News - Home",
+      "url": "http://feeds.bbci.co.uk/news/rss.xml",
+      "category": "news"
+    },
+    {
       "label": "Science et Avenir",
       "url": "https://www.sciencesetavenir.fr/rss.xml",
       "category": "technology"
+    },
+    {
+      "label": "01 Net",
+      "url": "http://www.01net.com/rss/actualites/culture-medias/",
+      "category": "technology"
+    },
+    {
+      "label": "CNETFrance.fr Internet",
+      "url": "http://www.cnetfrance.fr/feeds/rss/internet/",
+      "category": "technology"
+    },
+    {
+      "label": "CNETFrance.fr Google",
+      "url": "http://www.cnetfrance.fr/feeds/rss/company/0,3800007138,39790073o,00.htm",
+      "category": "android"
+    },
+    {
+      "label": "Android Zone",
+      "url": "http://www.android-zone.fr/feed/",
+      "category": "android"
     },
     {
       "label": "Fr Android",

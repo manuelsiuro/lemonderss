@@ -28,20 +28,23 @@ public class JsonSourcesParser {
 
         try {
 
-            itemList = new ArrayList<>();
+            itemList    = new ArrayList<>();
+            json        = loadJSONFromAsset();
+            jsonObject  = new JSONObject(json);
 
-            json = loadJSONFromAsset();
-            jsonObject = new JSONObject(json);
             items = jsonObject.getJSONArray("items");
 
             for (int i = 0; i < items.length(); i++) {
+
                 JSONObject item = items.getJSONObject(i);
-                String label = item.getString("label");
-                String url = item.getString("url");
+                String id       = ""+i;//item.getString("id");
+                String label    = item.getString("label");
+                String url      = item.getString("url");
                 String category = item.getString("category");
 
                 HashMap<String, String> feed = new HashMap<>();
 
+                feed.put("id", id);
                 feed.put("label", label);
                 feed.put("url", url);
                 feed.put("category", category);

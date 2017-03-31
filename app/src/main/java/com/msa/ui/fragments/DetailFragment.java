@@ -5,7 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +23,6 @@ import java.util.Locale;
 
 public class DetailFragment extends Fragment {
 
-    private static final String TAG = "==> DetailFragment : ";
     private TextToSpeech tts;
     private FragmentCallBack callback;
     private ImageView thumbnail;
@@ -40,12 +39,10 @@ public class DetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.i(TAG, "onCreateView");
 
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
@@ -64,7 +61,6 @@ public class DetailFragment extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
-        Log.i(TAG, "onStart");
 
         if(rssItem.getEnclosure()!=null){
             thumbnail.setVisibility(View.VISIBLE);
@@ -75,7 +71,7 @@ public class DetailFragment extends Fragment {
 
         title.setText(rssItem.getTitle());
         datetime.setText(getString(R.string.rss_date_time, rssItem.getStrDate(), rssItem.getStrTime()));
-        description.setText(rssItem.getDescription());
+        description.setText(formatDescription(rssItem.getDescription()));
 
         tts = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
             @Override
@@ -103,9 +99,25 @@ public class DetailFragment extends Fragment {
         });
     }
 
+    private CharSequence formatDescription(String description){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+            return formatDescriptionGreater24(description);
+        } else {
+            return formatDescriptionUnder24(description);
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private CharSequence formatDescriptionUnder24(String description){
+        return Html.fromHtml(description);
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    private CharSequence formatDescriptionGreater24(String description){
+        return Html.fromHtml(description, Html.FROM_HTML_MODE_COMPACT);
+    }
+
     private void speak(String message){
-        Log.i(TAG, "TTS speak " + message);
-        //tts.speak(message, TextToSpeech.QUEUE_FLUSH, null);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ttsGreater21(message);
         } else {
@@ -115,7 +127,6 @@ public class DetailFragment extends Fragment {
 
     @SuppressWarnings("deprecation")
     private void ttsUnder20(String text) {
-        Log.i(TAG, "TTS speak ttsUnder20");
         HashMap<String, String> map = new HashMap<>();
         map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "MessageId");
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, map);
@@ -123,7 +134,6 @@ public class DetailFragment extends Fragment {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void ttsGreater21(String text) {
-        Log.i(TAG, "TTS speak ttsUnder20");
         String utteranceId = this.hashCode() + "";
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
     }
@@ -131,14 +141,12 @@ public class DetailFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.i(TAG, "onSaveInstanceState");
         outState.putSerializable("rssItem", rssItem);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.i(TAG, "onActivityCreated");
         if ((savedInstanceState != null) && (savedInstanceState.getSerializable("rssItem") != null)) {
             rssItem = (RssItem) savedInstanceState.getSerializable("rssItem");
         } else {
