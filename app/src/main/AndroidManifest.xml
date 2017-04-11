@@ -35,6 +35,13 @@
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
 
+        <receiver android:name=".receivers.ChargingReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+            </intent-filter>
+        </receiver>
+
 
     </application>
 

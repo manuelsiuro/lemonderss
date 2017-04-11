@@ -19,8 +19,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.msa.ui.adapters.RssItem;
+import com.msa.ui.events.ChargingEvent;
 import com.msa.ui.fragments.CardViewFragment;
 import com.msa.ui.fragments.DetailFragment;
 import com.msa.ui.fragments.SettingsFragment;
@@ -29,12 +31,16 @@ import com.msa.ui.interfaces.FragmentCallBack;
 import com.msa.ui.parser.JsonSourcesParser;
 import com.msa.ui.preferences.PreferencesManager;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainActivityDrawer extends AppCompatActivity implements FragmentCallBack {
 
-    private String TAG = "MainActivityDrawer";
+
+    private static final String TAG = "MainActivityDrawer";
 
     private RssItem rssItem;
     private Toolbar toolbar;
@@ -45,6 +51,8 @@ public class MainActivityDrawer extends AppCompatActivity implements FragmentCal
     private PreferencesManager prefs;
     private String rssURL;
     private ArrayList<HashMap<String, String>> itemList;
+
+    private EventBus bus = EventBus.getDefault();
 
 
     @Override
@@ -123,7 +131,14 @@ public class MainActivityDrawer extends AppCompatActivity implements FragmentCal
             */
         }
 
+
+
         //showQuit();
+
+        // Register as a subscriber
+        bus.register(this);
+
+
 
     }
 
@@ -166,6 +181,7 @@ public class MainActivityDrawer extends AppCompatActivity implements FragmentCal
 
     @Override
     public void onDestroy() {
+        bus.unregister(this);
         super.onDestroy();
         Log.i(TAG, "onDestroy");
     }
@@ -207,6 +223,11 @@ public class MainActivityDrawer extends AppCompatActivity implements FragmentCal
         for (int i = 0; i < size; i++) {
             navigationView.getMenu().getItem(i).setChecked(false);
         }
+    }
+
+    @Subscribe
+    public void onEvent(ChargingEvent event){
+        Toast.makeText(this, event.getData(), Toast.LENGTH_SHORT).show();
     }
 
     private void initNavigationView(){
@@ -338,6 +359,7 @@ public class MainActivityDrawer extends AppCompatActivity implements FragmentCal
     }
 
     public void setRssURL(String rssURL, String title) {
+
         setRssURL(rssURL);
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         loadFragment(Constants.FRAGMENT.RSS_CARD);

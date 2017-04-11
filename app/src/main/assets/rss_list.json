@@ -11,6 +11,11 @@
       "category": "news"
     },
     {
+      "label": "Europe 1",
+      "url": "http://www.europe1.fr/var/export/rss/europe1/actus.xml",
+      "category": "news"
+    },
+    {
       "label": "Le Parisien",
       "url": "http://www.leparisien.fr/une/rss.xml",
       "category": "news"
